@@ -1,16 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-// Verifica BST
-// Comparações entre duas (copia, igual, inverter)
-// AVL
-
-typedef struct Node
-{
-    int data;
-    struct Node *left;
-    struct Node *right;
-} Node;
+#include "common.h"
+#include "tree.h"
 
 Node *createNode(int data)
 {
@@ -228,156 +217,72 @@ int searchLevel(Node *root, int data, int level)
     return searchLevel(root->left, data, level + 1);
 }
 
-int main()
+Node *copyTree(Node *root)
 {
-    int command, data;
-
-    Node *root1 = NULL;
-    Node *root2 = NULL;
-
-    Node **activeRoot = &root1;
-    int activeNum = 1;
-
-    while (1)
+    if (root == NULL)
     {
-        printf("\n=== MENU | Arvore ativa: %d ===\n", activeNum);
-        printf("[0] Encerra o programa\n");
-        printf("[1] Imprime em Ordem\n");
-        printf("[2] Insere elemento\n");
-        printf("[3] Remove elemento\n");
-        printf("[4] Busca um elemento\n");
-        printf("[5] Altura da Arvore\n");
-        printf("[6] Nodes da Arvore\n");
-        printf("[7] Folhas da Arvore\n");
-        printf("[8] Nivel de um Node\n");
-        printf("[9] Troca de Arvore\n");
-
-        scanf("%d", &command);
-
-        switch (command)
-        {
-        case 0:
-            clearTree(root1);
-            clearTree(root2);
-            return 0;
-
-        case 1:
-            if (*activeRoot == NULL)
-            {
-                printf("Arvore Vazia\n");
-            }
-            else
-            {
-                inOrder(*activeRoot);
-                printf("\n");
-            }
-
-            break;
-
-        case 2:
-            printf("Qual elemento?\n");
-
-            scanf("%d", &data);
-
-            *activeRoot = insertNode(*activeRoot, data);
-
-            break;
-
-        case 3:
-            printf("Qual elemento?\n");
-
-            scanf("%d", &data);
-
-            *activeRoot = removeNode(*activeRoot, data);
-
-            break;
-
-        case 4:
-        {
-            printf("Qual elemento?\n");
-
-            scanf("%d", &data);
-
-            Node *result = search(*activeRoot, data);
-
-            if (result != NULL)
-            {
-                printf("Elemento encontrado!\n");
-            }
-            else
-            {
-                printf("Elemento nao encontrado!\n");
-            }
-
-            break;
-        }
-
-        case 5:
-        {
-            int treeHeight = height(*activeRoot);
-
-            printf("A altura da arvore eh: %d\n", treeHeight);
-
-            break;
-        }
-
-        case 6:
-        {
-            int treeNodes = countNodes(*activeRoot);
-
-            printf("A arvore tem %d nodes\n", treeNodes);
-
-            break;
-        }
-
-        case 7:
-        {
-            int treeLeaves = countLeaves(*activeRoot);
-
-            printf("A arvore tem %d folhas\n", treeLeaves);
-
-            break;
-        }
-
-        case 8:
-            printf("Qual Node?\n");
-
-            scanf("%d", &data);
-
-            int level = searchLevel(*activeRoot, data, 0);
-
-            if (level == -1)
-            {
-                printf("Valor nao encontrado\n");
-            }
-            else
-            {
-                printf("Nivel: %d\n", level);
-            }
-
-            break;
-
-        case 9:
-            if (activeNum == 1)
-            {
-                activeRoot = &root2;
-                activeNum = 2;
-            }
-            else
-            {
-                activeRoot = &root1;
-                activeNum = 1;
-            }
-
-            printf("Arvore ativa: %d\n", activeNum);
-
-            break;
-
-        default:
-            printf("Insira um comando valido!\n");
-            break;
-        }
+        return NULL;
     }
 
-    return 0;
+    Node *newNode = createNode(root->data);
+
+    if (newNode == NULL)
+    {
+        return NULL;
+    }
+
+    newNode->left = copyTree(root->left);
+    newNode->right = copyTree(root->right);
+
+    return newNode;
+}
+
+int equalTrees(Node *root1, Node *root2)
+{
+    if (root1 == NULL && root2 == NULL)
+    {
+        return 1;
+    }
+
+    if (root1 == NULL || root2 == NULL)
+    {
+        return 0;
+    }
+
+    if (root1->data != root2->data)
+    {
+        return 0;
+    }
+
+    return equalTrees(root1->left, root2->left) && equalTrees(root1->right, root2->right);
+}
+
+void invertTree(Node *root)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+
+    Node *temp = root->left;
+    root->left = root->right;
+    root->right = temp;
+
+    invertTree(root->left);
+    invertTree(root->right);
+}
+
+int isBST(Node *root, int min, int max)
+{
+    if (root == NULL)
+    {
+        return 1;
+    }
+
+    if (root->data <= min || root->data >= max)
+    {
+        return 0;
+    }
+
+    return isBST(root->left, min, root->data) && isBST(root->right, root->data, max);
 }
