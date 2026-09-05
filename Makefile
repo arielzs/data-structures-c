@@ -1,8 +1,5 @@
 CC = gcc
 
-# Inclui a pasta include/ e todas as subpastas de src/ automaticamente,
-# assim "#include \"array.h\"" funciona de qualquer arquivo do projeto,
-# nao importa em que pasta ele esteja (nao precisa editar isso ao criar um novo modulo).
 INCLUDE_DIRS = $(shell find src -type d)
 CFLAGS = -Wall -Wextra -std=c11 -Iinclude $(addprefix -I,$(INCLUDE_DIRS))
 

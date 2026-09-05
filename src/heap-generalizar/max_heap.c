@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+/*
 
 typedef struct
 {
@@ -7,7 +8,6 @@ typedef struct
     int size;
     int capacity;
     int isHeap;
-
 } Heap;
 
 void pause()
@@ -466,3 +466,5 @@ int main()
 
     return 0;
 }
+    
+*/

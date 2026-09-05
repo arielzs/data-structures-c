@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+/*
 
 typedef struct Node
 {
@@ -610,3 +611,5 @@ int main()
 
     return 0;
 }
+      
+*/

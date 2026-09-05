@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+/*
 typedef struct Node
 {
     int vertex;
@@ -13,8 +13,4 @@ typedef struct
     Node **adj;
 } Graph;
 
-int main()
-{
-
-    return 0;
-}
+*/
