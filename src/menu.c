@@ -1,21 +1,21 @@
 #include "common.h"
 #include "menu.h"
 #include "utils.h"
-#include "tree.h"
+#include "array.h" /* declara runArrayMenu() */
+#include "stack.h" /* declara runStackMenu() */
+#include "tree.h"  /* declara runTreeMenu() */
 
-/* Descomentar conforme cada estrutura for sendo implementada.
-   Cada modulo deve expor uma funcao runXxxMenu(void), igual o tree.h faz */
+/* Descomente conforme cada estrutura for sendo implementada.
+   Cada modulo deve expor uma funcao runXxxMenu(void), igual o tree.h, array.h e stack.h fazem. */
 /*
-#include "array.h"
 #include "deque.h"
 #include "graph.h"
 #include "hash_table.h"
 #include "heap.h"
 #include "queue.h"
-#include "stack.h"
 */
 
-static void printMainMenu()
+static void printMainMenu(void)
 {
     printf("\n=== DATA STRUCTURES C ===\n");
     printf("[1] Array\n");
@@ -31,9 +31,10 @@ static void printMainMenu()
 
 void runMainMenu(void)
 {
-    int choice = -1;
+    int choice;
+    int running = 1;
 
-    while (choice != 0)
+    while (running)
     {
         printMainMenu();
         choice = utilsReadInt("Escolha: ");
@@ -41,8 +42,7 @@ void runMainMenu(void)
         switch (choice)
         {
         case 1:
-            printf("Array ainda esta em desenvolvimento!\n");
-            /* runArrayMenu(); */
+            runArrayMenu();
             break;
 
         case 2:
@@ -71,8 +71,7 @@ void runMainMenu(void)
             break;
 
         case 7:
-            printf("Stack ainda esta em desenvolvimento!\n");
-            /* runStackMenu(); */
+            runStackMenu();
             break;
 
         case 8:
@@ -81,6 +80,7 @@ void runMainMenu(void)
 
         case 0:
             printf("Encerrando...\n");
+            running = 0;
             break;
 
         default:

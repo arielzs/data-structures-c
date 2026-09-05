@@ -1,9 +1,9 @@
 #include "common.h"
 #include "tree.h"
 
-Node *createNode(int data)
+BSTNode *createNode(int data)
 {
-    Node *newNode = malloc(sizeof(Node));
+    BSTNode *newNode = malloc(sizeof(BSTNode));
 
     if (newNode == NULL)
     {
@@ -18,7 +18,7 @@ Node *createNode(int data)
     return newNode;
 }
 
-void preOrder(Node *root)
+void preOrder(BSTNode *root)
 {
     if (root != NULL)
     {
@@ -28,7 +28,7 @@ void preOrder(Node *root)
     }
 }
 
-void inOrder(Node *root)
+void inOrder(BSTNode *root)
 {
     if (root != NULL)
     {
@@ -38,7 +38,7 @@ void inOrder(Node *root)
     }
 }
 
-void postOrder(Node *root)
+void postOrder(BSTNode *root)
 {
     if (root != NULL)
     {
@@ -48,7 +48,7 @@ void postOrder(Node *root)
     }
 }
 
-void clearTree(Node *root)
+void clearTree(BSTNode *root)
 {
     if (root == NULL)
     {
@@ -60,7 +60,7 @@ void clearTree(Node *root)
     free(root);
 }
 
-Node *insertNode(Node *root, int data)
+BSTNode *insertNode(BSTNode *root, int data)
 {
     if (root == NULL)
     {
@@ -84,7 +84,7 @@ Node *insertNode(Node *root, int data)
     return root;
 }
 
-Node *removeNode(Node *root, int data)
+BSTNode *removeNode(BSTNode *root, int data)
 {
     if (root == NULL)
     {
@@ -109,19 +109,19 @@ Node *removeNode(Node *root, int data)
         }
         else if (root->left == NULL)
         {
-            Node *temp = root->right;
+            BSTNode *temp = root->right;
             free(root);
             return temp;
         }
         else if (root->right == NULL)
         {
-            Node *temp = root->left;
+            BSTNode *temp = root->left;
             free(root);
             return temp;
         }
         else
         {
-            Node *successor = root->right;
+            BSTNode *successor = root->right;
 
             while (successor->left != NULL)
             {
@@ -137,7 +137,7 @@ Node *removeNode(Node *root, int data)
     return root;
 }
 
-int height(Node *root)
+int height(BSTNode *root)
 {
     if (root == NULL)
     {
@@ -157,7 +157,7 @@ int height(Node *root)
     }
 }
 
-int countNodes(Node *root)
+int countNodes(BSTNode *root)
 {
     if (root == NULL)
     {
@@ -167,7 +167,7 @@ int countNodes(Node *root)
     return 1 + countNodes(root->left) + countNodes(root->right);
 }
 
-int countLeaves(Node *root)
+int countLeaves(BSTNode *root)
 {
     if (root == NULL)
     {
@@ -182,7 +182,7 @@ int countLeaves(Node *root)
     return countLeaves(root->left) + countLeaves(root->right);
 }
 
-Node *search(Node *root, int data)
+BSTNode *search(BSTNode *root, int data)
 {
     if (root == NULL || root->data == data)
     {
@@ -197,7 +197,7 @@ Node *search(Node *root, int data)
     return search(root->left, data);
 }
 
-int searchLevel(Node *root, int data, int level)
+int searchLevel(BSTNode *root, int data, int level)
 {
     if (root == NULL)
     {
@@ -217,14 +217,14 @@ int searchLevel(Node *root, int data, int level)
     return searchLevel(root->left, data, level + 1);
 }
 
-Node *copyTree(Node *root)
+BSTNode *copyTree(BSTNode *root)
 {
     if (root == NULL)
     {
         return NULL;
     }
 
-    Node *newNode = createNode(root->data);
+    BSTNode *newNode = createNode(root->data);
 
     if (newNode == NULL)
     {
@@ -237,7 +237,7 @@ Node *copyTree(Node *root)
     return newNode;
 }
 
-int equalTrees(Node *root1, Node *root2)
+int equalTrees(BSTNode *root1, BSTNode *root2)
 {
     if (root1 == NULL && root2 == NULL)
     {
@@ -257,14 +257,14 @@ int equalTrees(Node *root1, Node *root2)
     return equalTrees(root1->left, root2->left) && equalTrees(root1->right, root2->right);
 }
 
-void invertTree(Node *root)
+void invertTree(BSTNode *root)
 {
     if (root == NULL)
     {
         return;
     }
 
-    Node *temp = root->left;
+    BSTNode *temp = root->left;
     root->left = root->right;
     root->right = temp;
 
@@ -272,7 +272,7 @@ void invertTree(Node *root)
     invertTree(root->right);
 }
 
-int isBST(Node *root, int min, int max)
+int isBST(BSTNode *root, int min, int max)
 {
     if (root == NULL)
     {

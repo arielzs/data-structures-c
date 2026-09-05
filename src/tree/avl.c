@@ -1,9 +1,9 @@
 #include "common.h"
 #include "tree.h"
 
-NodeAVL *createNodeAVL(int data)
+AVLNode *createNodeAVL(int data)
 {
-    NodeAVL *newNode = malloc(sizeof(NodeAVL));
+    AVLNode *newNode = malloc(sizeof(AVLNode));
 
     if (newNode == NULL)
     {
@@ -19,7 +19,7 @@ NodeAVL *createNodeAVL(int data)
     return newNode;
 }
 
-int heightAVL(NodeAVL *root)
+int heightAVL(AVLNode *root)
 {
     if (root == NULL)
     {
@@ -30,7 +30,7 @@ int heightAVL(NodeAVL *root)
 }
 
 /* Atualiza a altura de um node com base na altura dos filhos */
-static void updateHeight(NodeAVL *root)
+static void updateHeight(AVLNode *root)
 {
     int leftHeight = heightAVL(root->left);
     int rightHeight = heightAVL(root->right);
@@ -45,7 +45,7 @@ static void updateHeight(NodeAVL *root)
     }
 }
 
-int balanceFactor(NodeAVL *root)
+int balanceFactor(AVLNode *root)
 {
     if (root == NULL)
     {
@@ -55,10 +55,10 @@ int balanceFactor(NodeAVL *root)
     return heightAVL(root->left) - heightAVL(root->right);
 }
 
-NodeAVL *rotateRight(NodeAVL *root)
+AVLNode *rotateRight(AVLNode *root)
 {
-    NodeAVL *newRoot = root->left;
-    NodeAVL *transferred = newRoot->right;
+    AVLNode *newRoot = root->left;
+    AVLNode *transferred = newRoot->right;
 
     newRoot->right = root;
     root->left = transferred;
@@ -69,10 +69,10 @@ NodeAVL *rotateRight(NodeAVL *root)
     return newRoot;
 }
 
-NodeAVL *rotateLeft(NodeAVL *root)
+AVLNode *rotateLeft(AVLNode *root)
 {
-    NodeAVL *newRoot = root->right;
-    NodeAVL *transferred = newRoot->left;
+    AVLNode *newRoot = root->right;
+    AVLNode *transferred = newRoot->left;
 
     newRoot->left = root;
     root->right = transferred;
@@ -83,19 +83,19 @@ NodeAVL *rotateLeft(NodeAVL *root)
     return newRoot;
 }
 
-NodeAVL *rotateLeftRight(NodeAVL *root)
+AVLNode *rotateLeftRight(AVLNode *root)
 {
     root->left = rotateLeft(root->left);
     return rotateRight(root);
 }
 
-NodeAVL *rotateRightLeft(NodeAVL *root)
+AVLNode *rotateRightLeft(AVLNode *root)
 {
     root->right = rotateRight(root->right);
     return rotateLeft(root);
 }
 
-NodeAVL *balance(NodeAVL *root)
+AVLNode *balance(AVLNode *root)
 {
     if (root == NULL)
     {
@@ -129,14 +129,14 @@ NodeAVL *balance(NodeAVL *root)
     return root;
 }
 
-NodeAVL *copyTreeAVL(NodeAVL *root)
+AVLNode *copyTreeAVL(AVLNode *root)
 {
     if (root == NULL)
     {
         return NULL;
     }
 
-    NodeAVL *newNode = createNodeAVL(root->data);
+    AVLNode *newNode = createNodeAVL(root->data);
 
     if (newNode == NULL)
     {
@@ -150,7 +150,7 @@ NodeAVL *copyTreeAVL(NodeAVL *root)
     return newNode;
 }
 
-NodeAVL *insertAVL(NodeAVL *root, int data)
+AVLNode *insertAVL(AVLNode *root, int data)
 {
     if (root == NULL)
     {
@@ -174,7 +174,7 @@ NodeAVL *insertAVL(NodeAVL *root, int data)
     return balance(root);
 }
 
-NodeAVL *removeAVL(NodeAVL *root, int data)
+AVLNode *removeAVL(AVLNode *root, int data)
 {
     if (root == NULL)
     {
@@ -199,19 +199,19 @@ NodeAVL *removeAVL(NodeAVL *root, int data)
         }
         else if (root->left == NULL)
         {
-            NodeAVL *temp = root->right;
+            AVLNode *temp = root->right;
             free(root);
             return temp;
         }
         else if (root->right == NULL)
         {
-            NodeAVL *temp = root->left;
+            AVLNode *temp = root->left;
             free(root);
             return temp;
         }
         else
         {
-            NodeAVL *successor = root->right;
+            AVLNode *successor = root->right;
 
             while (successor->left != NULL)
             {
@@ -228,7 +228,7 @@ NodeAVL *removeAVL(NodeAVL *root, int data)
 
 /* ===================== Utilitarias (equivalentes as da BST) ===================== */
 
-void preOrderAVL(NodeAVL *root)
+void preOrderAVL(AVLNode *root)
 {
     if (root != NULL)
     {
@@ -238,7 +238,7 @@ void preOrderAVL(NodeAVL *root)
     }
 }
 
-void inOrderAVL(NodeAVL *root)
+void inOrderAVL(AVLNode *root)
 {
     if (root != NULL)
     {
@@ -248,7 +248,7 @@ void inOrderAVL(NodeAVL *root)
     }
 }
 
-void postOrderAVL(NodeAVL *root)
+void postOrderAVL(AVLNode *root)
 {
     if (root != NULL)
     {
@@ -258,7 +258,7 @@ void postOrderAVL(NodeAVL *root)
     }
 }
 
-void clearTreeAVL(NodeAVL *root)
+void clearTreeAVL(AVLNode *root)
 {
     if (root == NULL)
     {
@@ -270,7 +270,7 @@ void clearTreeAVL(NodeAVL *root)
     free(root);
 }
 
-int countNodesAVL(NodeAVL *root)
+int countNodesAVL(AVLNode *root)
 {
     if (root == NULL)
     {
@@ -280,7 +280,7 @@ int countNodesAVL(NodeAVL *root)
     return 1 + countNodesAVL(root->left) + countNodesAVL(root->right);
 }
 
-int countLeavesAVL(NodeAVL *root)
+int countLeavesAVL(AVLNode *root)
 {
     if (root == NULL)
     {
@@ -295,7 +295,7 @@ int countLeavesAVL(NodeAVL *root)
     return countLeavesAVL(root->left) + countLeavesAVL(root->right);
 }
 
-NodeAVL *searchAVL(NodeAVL *root, int data)
+AVLNode *searchAVL(AVLNode *root, int data)
 {
     if (root == NULL || root->data == data)
     {
@@ -310,7 +310,7 @@ NodeAVL *searchAVL(NodeAVL *root, int data)
     return searchAVL(root->left, data);
 }
 
-int searchLevelAVL(NodeAVL *root, int data, int level)
+int searchLevelAVL(AVLNode *root, int data, int level)
 {
     if (root == NULL)
     {
@@ -330,7 +330,7 @@ int searchLevelAVL(NodeAVL *root, int data, int level)
     return searchLevelAVL(root->left, data, level + 1);
 }
 
-int equalTreesAVL(NodeAVL *root1, NodeAVL *root2)
+int equalTreesAVL(AVLNode *root1, AVLNode *root2)
 {
     if (root1 == NULL && root2 == NULL)
     {
@@ -350,14 +350,14 @@ int equalTreesAVL(NodeAVL *root1, NodeAVL *root2)
     return equalTreesAVL(root1->left, root2->left) && equalTreesAVL(root1->right, root2->right);
 }
 
-void invertTreeAVL(NodeAVL *root)
+void invertTreeAVL(AVLNode *root)
 {
     if (root == NULL)
     {
         return;
     }
 
-    NodeAVL *temp = root->left;
+    AVLNode *temp = root->left;
     root->left = root->right;
     root->right = temp;
 
@@ -365,7 +365,7 @@ void invertTreeAVL(NodeAVL *root)
     invertTreeAVL(root->right);
 }
 
-int isBSTAVL(NodeAVL *root, int min, int max)
+int isBSTAVL(AVLNode *root, int min, int max)
 {
     if (root == NULL)
     {

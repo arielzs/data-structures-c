@@ -2,70 +2,70 @@
 #define TREE_H
 
 /* Ponto de entrada do submenu de arvores, chamado pelo menu.c */
-void runTreeMenu();
+void runTreeMenu(void);
 
 /* ========================= BST ========================= */
 
-typedef struct Node
+typedef struct BSTNode
 {
     int data;
-    struct Node *left;
-    struct Node *right;
-} Node;
+    struct BSTNode *left;
+    struct BSTNode *right;
+} BSTNode;
 
-Node *createNode(int data);
-void preOrder(Node *root);
-void inOrder(Node *root);
-void postOrder(Node *root);
-void clearTree(Node *root);
-Node *insertNode(Node *root, int data);
-Node *removeNode(Node *root, int data);
-int height(Node *root);
-int countNodes(Node *root);
-int countLeaves(Node *root);
-Node *search(Node *root, int data);
-int searchLevel(Node *root, int data, int level);
-Node *copyTree(Node *root);
-int equalTrees(Node *root1, Node *root2);
-void invertTree(Node *root);
-int isBST(Node *root, int min, int max);
+BSTNode *createNode(int data);
+void preOrder(BSTNode *root);
+void inOrder(BSTNode *root);
+void postOrder(BSTNode *root);
+void clearTree(BSTNode *root);
+BSTNode *insertNode(BSTNode *root, int data);
+BSTNode *removeNode(BSTNode *root, int data);
+int height(BSTNode *root);
+int countNodes(BSTNode *root);
+int countLeaves(BSTNode *root);
+BSTNode *search(BSTNode *root, int data);
+int searchLevel(BSTNode *root, int data, int level);
+BSTNode *copyTree(BSTNode *root);
+int equalTrees(BSTNode *root1, BSTNode *root2);
+void invertTree(BSTNode *root);
+int isBST(BSTNode *root, int min, int max);
 
 /* ========================= AVL ========================= */
 
-typedef struct NodeAVL
+typedef struct AVLNode
 {
     int data;
     int height;
-    struct NodeAVL *left;
-    struct NodeAVL *right;
-} NodeAVL;
+    struct AVLNode *left;
+    struct AVLNode *right;
+} AVLNode;
 
-NodeAVL *createNodeAVL(int data);
-int heightAVL(NodeAVL *root);
-NodeAVL *copyTreeAVL(NodeAVL *root);
+AVLNode *createNodeAVL(int data);
+int heightAVL(AVLNode *root);
+AVLNode *copyTreeAVL(AVLNode *root);
 
 /* Balanceamento */
-int balanceFactor(NodeAVL *root);
-NodeAVL *rotateRight(NodeAVL *root);
-NodeAVL *rotateLeft(NodeAVL *root);
-NodeAVL *rotateLeftRight(NodeAVL *root);
-NodeAVL *rotateRightLeft(NodeAVL *root);
-NodeAVL *balance(NodeAVL *root);
+int balanceFactor(AVLNode *root);
+AVLNode *rotateRight(AVLNode *root);
+AVLNode *rotateLeft(AVLNode *root);
+AVLNode *rotateLeftRight(AVLNode *root);
+AVLNode *rotateRightLeft(AVLNode *root);
+AVLNode *balance(AVLNode *root);
 
-NodeAVL *insertAVL(NodeAVL *root, int data);
-NodeAVL *removeAVL(NodeAVL *root, int data);
+AVLNode *insertAVL(AVLNode *root, int data);
+AVLNode *removeAVL(AVLNode *root, int data);
 
 /* Equivalentes as funcoes utilitarias da BST, para a arvore AVL */
-void preOrderAVL(NodeAVL *root);
-void inOrderAVL(NodeAVL *root);
-void postOrderAVL(NodeAVL *root);
-void clearTreeAVL(NodeAVL *root);
-int countNodesAVL(NodeAVL *root);
-int countLeavesAVL(NodeAVL *root);
-NodeAVL *searchAVL(NodeAVL *root, int data);
-int searchLevelAVL(NodeAVL *root, int data, int level);
-int equalTreesAVL(NodeAVL *root1, NodeAVL *root2);
-void invertTreeAVL(NodeAVL *root);
-int isBSTAVL(NodeAVL *root, int min, int max);
+void preOrderAVL(AVLNode *root);
+void inOrderAVL(AVLNode *root);
+void postOrderAVL(AVLNode *root);
+void clearTreeAVL(AVLNode *root);
+int countNodesAVL(AVLNode *root);
+int countLeavesAVL(AVLNode *root);
+AVLNode *searchAVL(AVLNode *root, int data);
+int searchLevelAVL(AVLNode *root, int data, int level);
+int equalTreesAVL(AVLNode *root1, AVLNode *root2);
+void invertTreeAVL(AVLNode *root);
+int isBSTAVL(AVLNode *root, int min, int max);
 
 #endif
