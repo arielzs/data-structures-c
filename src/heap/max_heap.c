@@ -1,26 +1,14 @@
-#include <stdio.h>
-#include <stdlib.h>
-typedef struct
+#include "common.h"
+#include "heap.h"
+
+Heap *maxHeapCreate(int capacity)
 {
-    int *array;
-    int size;
-    int capacity;
-    int isHeap;
-} Heap;
+    if (capacity <= 0)
+    {
+        return NULL;
+    }
 
-void pause()
-{
-    printf("\nPressione ENTER para continuar...");
-
-    while (getchar() != '\n')
-        ;
-
-    getchar();
-}
-
-Heap *createHeap(int capacity)
-{
-    Heap *h = malloc(sizeof(*h));
+    Heap *h = malloc(sizeof(Heap));
 
     if (h == NULL)
     {
@@ -38,11 +26,12 @@ Heap *createHeap(int capacity)
     h->size = 0;
     h->capacity = capacity;
     h->isHeap = 1;
+    h->type = HEAP_MAX;
 
     return h;
 }
 
-void destroyHeap(Heap *h)
+void maxHeapDestroy(Heap *h)
 {
     if (h == NULL)
     {
@@ -53,7 +42,7 @@ void destroyHeap(Heap *h)
     free(h);
 }
 
-void printHeap(Heap *h)
+void maxHeapPrint(Heap *h)
 {
     if (h == NULL)
     {
@@ -87,55 +76,7 @@ void printHeap(Heap *h)
     }
 }
 
-void heapifyUp(Heap *h, int index)
-{
-    while (index > 0)
-    {
-        int parent = (index - 1) / 2;
-
-        if (h->array[index] > h->array[parent])
-        {
-            int temp = h->array[index];
-            h->array[index] = h->array[parent];
-            h->array[parent] = temp;
-
-            index = parent;
-        }
-        else
-        {
-            break;
-        }
-    }
-}
-
-void heapifyDown(Heap *h, int index)
-{
-    while (2 * index + 1 < h->size)
-    {
-        int leftChild = 2 * index + 1;
-        int rightChild = 2 * index + 2;
-        int maxChild = leftChild;
-
-        if (rightChild < h->size &&
-            h->array[rightChild] > h->array[leftChild])
-        {
-            maxChild = rightChild;
-        }
-
-        if (h->array[index] >= h->array[maxChild])
-        {
-            break;
-        }
-
-        int temp = h->array[maxChild];
-        h->array[maxChild] = h->array[index];
-        h->array[index] = temp;
-
-        index = maxChild;
-    }
-}
-
-int reSize(Heap *h, int newCapacity)
+int maxHeapResize(Heap *h, int newCapacity)
 {
     if (h == NULL)
     {
@@ -165,7 +106,55 @@ int reSize(Heap *h, int newCapacity)
     return 1;
 }
 
-void insert(Heap *h, int data)
+static void maxHeapifyUp(Heap *h, int index)
+{
+    while (index > 0)
+    {
+        int parent = (index - 1) / 2;
+
+        if (h->array[index] > h->array[parent])
+        {
+            int temp = h->array[index];
+            h->array[index] = h->array[parent];
+            h->array[parent] = temp;
+
+            index = parent;
+        }
+        else
+        {
+            break;
+        }
+    }
+}
+
+static void maxHeapifyDown(Heap *h, int index)
+{
+    while (2 * index + 1 < h->size)
+    {
+        int leftChild = 2 * index + 1;
+        int rightChild = 2 * index + 2;
+        int maxChild = leftChild;
+
+        if (rightChild < h->size &&
+            h->array[rightChild] > h->array[leftChild])
+        {
+            maxChild = rightChild;
+        }
+
+        if (h->array[index] >= h->array[maxChild])
+        {
+            break;
+        }
+
+        int temp = h->array[maxChild];
+        h->array[maxChild] = h->array[index];
+        h->array[index] = temp;
+
+        index = maxChild;
+    }
+}
+
+void maxHeapInsert(Heap *h, int data)
 {
     if (h == NULL)
     {
@@ -181,7 +170,7 @@ void insert(Heap *h, int data)
 
     if (h->size == h->capacity)
     {
-        if (!reSize(h, h->capacity * 2))
+        if (!maxHeapResize(h, h->capacity * 2))
         {
             return;
         }
@@ -193,10 +182,10 @@ void insert(Heap *h, int data)
 
     h->size++;
 
-    heapifyUp(h, index);
+    maxHeapifyUp(h, index);
 }
 
-int extractMax(Heap *h, int *max)
+int maxHeapExtract(Heap *h, int *max)
 {
     if (h == NULL || h->size == 0 || max == NULL)
     {
@@ -216,12 +205,12 @@ int extractMax(Heap *h, int *max)
 
     h->size--;
 
-    heapifyDown(h, 0);
+    maxHeapifyDown(h, 0);
 
     return 1;
 }
 
-int update(Heap *h, int index, int newData)
+int maxHeapUpdate(Heap *h, int index, int newData)
 {
     if (h == NULL ||
         h->size == 0 ||
@@ -242,17 +231,17 @@ int update(Heap *h, int index, int newData)
 
     if (newData > oldData)
     {
-        heapifyUp(h, index);
+        maxHeapifyUp(h, index);
     }
     else if (newData < oldData)
     {
-        heapifyDown(h, index);
+        maxHeapifyDown(h, index);
     }
 
     return 1;
 }
 
-void buildHeap(Heap *h)
+void maxHeapBuild(Heap *h)
 {
     if (h == NULL || h->size == 0)
     {
@@ -263,13 +252,13 @@ void buildHeap(Heap *h)
 
     for (int i = lastParent; i >= 0; i--)
     {
-        heapifyDown(h, i);
+        maxHeapifyDown(h, i);
     }
 
     h->isHeap = 1;
 }
 
-void heapSort(Heap *h)
+void maxHeapSort(Heap *h)
 {
     if (h == NULL || h->size <= 1)
     {
@@ -293,174 +282,10 @@ void heapSort(Heap *h)
 
         h->size--;
 
-        heapifyDown(h, 0);
+        maxHeapifyDown(h, 0);
     }
 
     h->size = originalSize;
 
     h->isHeap = 0;
-}
-
-int main()
-{
-    int command, data;
-
-    Heap *h1 = createHeap(10);
-    Heap *h2 = createHeap(10);
-
-    if (h1 == NULL || h2 == NULL)
-    {
-        destroyHeap(h1);
-        destroyHeap(h2);
-
-        return 1;
-    }
-
-    Heap **activeHeap = &h1;
-
-    int activeNum = 1;
-
-    while (1)
-    {
-        printf("\n=== MENU | Heap ativa: %d ===\n", activeNum);
-
-        printf("[0] Encerra o Programa\n");
-        printf("[1] Mostra a Heap\n");
-        printf("[2] Troca a Heap\n");
-        printf("[3] Insere elemento\n");
-        printf("[4] Extrai maior elemento\n");
-        printf("[5] Atualiza um elemento\n");
-        printf("[6] Aumenta a capacidade\n");
-        printf("[7] Ordena com HeapSort\n");
-        printf("[8] Transforma vetor em Heap\n");
-
-        scanf("%d", &command);
-
-        switch (command)
-        {
-        case 0:
-            destroyHeap(h1);
-            destroyHeap(h2);
-
-            return 0;
-
-        case 1:
-            printHeap(*activeHeap);
-            pause();
-            break;
-
-        case 2:
-            if (activeHeap == &h1)
-            {
-                activeHeap = &h2;
-                activeNum = 2;
-            }
-            else
-            {
-                activeHeap = &h1;
-                activeNum = 1;
-            }
-
-            printf("Heap ativa: %d\n", activeNum);
-
-            break;
-
-        case 3:
-            printf("Qual elemento?\n");
-
-            scanf("%d", &data);
-
-            insert(*activeHeap, data);
-
-            break;
-
-        case 4:
-        {
-            int max;
-
-            if (!extractMax(*activeHeap, &max))
-            {
-                printf("Erro: nao foi possivel extrair o maior elemento\n");
-                break;
-            }
-
-            printf("Valor maximo: %d extraido\n", max);
-
-            break;
-        }
-
-        case 5:
-        {
-            int newData, index;
-
-            printf("Em qual index?\n");
-
-            scanf("%d", &index);
-
-            printf("Para qual valor?\n");
-
-            scanf("%d", &newData);
-
-            if (!update(*activeHeap, index, newData))
-            {
-                printf("Erro: nao foi possivel atualizar\n");
-                break;
-            }
-
-            printf("Alteracao feita!\n");
-
-            break;
-        }
-
-        case 6:
-        {
-            int newCapacity;
-
-            printf("Qual a nova capacidade?\n");
-
-            scanf("%d", &newCapacity);
-
-            if (!reSize(*activeHeap, newCapacity))
-            {
-                printf("Erro no ReSize\n");
-                break;
-            }
-
-            printf("Capacidade alterada!\n");
-
-            break;
-        }
-
-        case 7:
-        {
-            if (!(*activeHeap)->isHeap)
-            {
-                printf("Erro: o vetor atual nao e uma Heap\n");
-                printf("Faca BuildHeap primeiro\n");
-                break;
-            }
-
-            heapSort(*activeHeap);
-
-            printf("Vetor ordenado!\n");
-
-            break;
-        }
-
-        case 8:
-        {
-            buildHeap(*activeHeap);
-
-            printf("Max-Heap construida!\n");
-
-            break;
-        }
-
-        default:
-            printf("Insira um comando valido!\n");
-            break;
-        }
-    }
-
-    return 0;
 }

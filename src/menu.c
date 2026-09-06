@@ -3,6 +3,7 @@
 #include "utils.h"
 #include "array.h"      /* declara runArrayMenu() */
 #include "hash_table.h" /* declara runHashTableMenu() */
+#include "heap.h"       /* declara runHeapMenu() */
 #include "queue.h"      /* declara runQueueMenu() */
 #include "stack.h"      /* declara runStackMenu() */
 #include "tree.h"       /* declara runTreeMenu() */
@@ -12,7 +13,6 @@
 /*
 #include "deque.h"
 #include "graph.h"
-#include "heap.h"
 */
 
 static void printMainMenu(void)
@@ -60,8 +60,7 @@ void runMainMenu(void)
             break;
 
         case 5:
-            printf("Heap ainda esta em desenvolvimento!\n");
-            /* runHeapMenu(); */
+            runHeapMenu();
             break;
 
         case 6:

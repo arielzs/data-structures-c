@@ -1,3 +1,20 @@
 {
-    "C_Cpp.default.cStandard": "c11"
+    "C_Cpp.default.cStandard": "c11",
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/include",
+        "${workspaceFolder}/src/**"
+    ],
+    "files.associations": {
+        "*.h": "c"
+    },
+    "files.exclude": {
+        "**/bin": true
+    },
+    "search.exclude": {
+        "**/bin": true
+    },
+    "[makefile]": {
+        "editor.insertSpaces": false,
+        "editor.tabSize": 4
+    }
 }
