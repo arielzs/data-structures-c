@@ -1,17 +1,17 @@
 #include "common.h"
 #include "menu.h"
 #include "utils.h"
-#include "array.h" /* declara runArrayMenu() */
-#include "queue.h" /* declara runQueueMenu() */
-#include "stack.h" /* declara runStackMenu() */
-#include "tree.h"  /* declara runTreeMenu() */
+#include "array.h"      /* declara runArrayMenu() */
+#include "hash_table.h" /* declara runHashTableMenu() */
+#include "queue.h"      /* declara runQueueMenu() */
+#include "stack.h"      /* declara runStackMenu() */
+#include "tree.h"       /* declara runTreeMenu() */
 
 /* Descomente conforme cada estrutura for sendo implementada.
    Cada modulo deve expor uma funcao runXxxMenu(void), igual os outros headers fazem. */
 /*
 #include "deque.h"
 #include "graph.h"
-#include "hash_table.h"
 #include "heap.h"
 */
 
@@ -56,8 +56,7 @@ void runMainMenu(void)
             break;
 
         case 4:
-            printf("Hash Table ainda esta em desenvolvimento!\n");
-            /* runHashTableMenu(); */
+            runHashTableMenu();
             break;
 
         case 5:

@@ -1,8 +1,18 @@
 # Compiled files
 bin/
+*.o
+*.out
+*.exe
+a.out
 
-# VSCode
-.vscode/
+# Core dumps (ex: se o programa crashar rodando com gdb/valgrind)
+core
+core.*
+vgcore.*
+
+# VSCode (compartilha o settings.json)
+.vscode/*
+!.vscode/settings.json
 
 # Operating system files
 .DS_Store
