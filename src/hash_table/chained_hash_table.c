@@ -1,14 +1,14 @@
 #include "common.h"
 #include "hash_table.h"
 
-static int hashFunction(int size, int key)
+static int chainedHashFunction(int size, int key)
 {
     return ((key % size) + size) % size;
 }
 
-HashTable *hashTableCreate(int size)
+ChainedHashTable *chainedHashTableCreate(int size)
 {
-    HashTable *ht = malloc(sizeof(HashTable));
+    ChainedHashTable *ht = malloc(sizeof(ChainedHashTable));
 
     if (ht == NULL)
     {
@@ -17,7 +17,7 @@ HashTable *hashTableCreate(int size)
 
     ht->count = 0;
     ht->size = size;
-    ht->table = calloc(size, sizeof(HashNode *));
+    ht->table = calloc(size, sizeof(ChainedHashNode *));
 
     if (ht->table == NULL)
     {
@@ -28,15 +28,15 @@ HashTable *hashTableCreate(int size)
     return ht;
 }
 
-void hashTableClearElements(HashTable *ht)
+void chainedHashTableClearElements(ChainedHashTable *ht)
 {
     for (int i = 0; i < ht->size; i++)
     {
-        HashNode *current = ht->table[i];
+        ChainedHashNode *current = ht->table[i];
 
         while (current != NULL)
         {
-            HashNode *temp = current;
+            ChainedHashNode *temp = current;
             current = current->next;
             free(temp);
         }
@@ -47,25 +47,25 @@ void hashTableClearElements(HashTable *ht)
     ht->count = 0;
 }
 
-void hashTableDestroy(HashTable *ht)
+void chainedHashTableDestroy(ChainedHashTable *ht)
 {
     if (ht == NULL)
     {
         return;
     }
 
-    hashTableClearElements(ht);
+    chainedHashTableClearElements(ht);
     free(ht->table);
     free(ht);
 }
 
-void hashTablePrint(HashTable *ht)
+void chainedHashTablePrint(ChainedHashTable *ht)
 {
     for (int i = 0; i < ht->size; i++)
     {
         printf("[%d] -> ", i);
 
-        HashNode *current = ht->table[i];
+        ChainedHashNode *current = ht->table[i];
 
         while (current != NULL)
         {
@@ -77,9 +77,9 @@ void hashTablePrint(HashTable *ht)
     }
 }
 
-static HashNode *createHashNode(int key)
+static ChainedHashNode *createChainedHashNode(int key)
 {
-    HashNode *newNode = malloc(sizeof(HashNode));
+    ChainedHashNode *newNode = malloc(sizeof(ChainedHashNode));
 
     if (newNode == NULL)
     {
@@ -92,11 +92,11 @@ static HashNode *createHashNode(int key)
     return newNode;
 }
 
-void hashTableInsert(HashTable *ht, int key)
+void chainedHashTableInsert(ChainedHashTable *ht, int key)
 {
-    int index = hashFunction(ht->size, key);
+    int index = chainedHashFunction(ht->size, key);
 
-    HashNode *newNode = createHashNode(key);
+    ChainedHashNode *newNode = createChainedHashNode(key);
 
     if (newNode == NULL)
     {
@@ -111,18 +111,18 @@ void hashTableInsert(HashTable *ht, int key)
 
     if (loadFactor >= 0.75)
     {
-        if (hashTableRehash(ht, ht->size * 2))
+        if (chainedHashTableRehash(ht, ht->size * 2))
         {
             printf("ReHash automatico realizado!\n");
         }
     }
 }
 
-void hashTableInsertNoResize(HashTable *ht, int key)
+void chainedHashTableInsertNoResize(ChainedHashTable *ht, int key)
 {
-    int index = hashFunction(ht->size, key);
+    int index = chainedHashFunction(ht->size, key);
 
-    HashNode *newNode = createHashNode(key);
+    ChainedHashNode *newNode = createChainedHashNode(key);
 
     if (newNode == NULL)
     {
@@ -134,12 +134,12 @@ void hashTableInsertNoResize(HashTable *ht, int key)
     ht->count++;
 }
 
-int hashTableRemove(HashTable *ht, int key)
+int chainedHashTableRemove(ChainedHashTable *ht, int key)
 {
-    int index = hashFunction(ht->size, key);
+    int index = chainedHashFunction(ht->size, key);
 
-    HashNode *current = ht->table[index];
-    HashNode *prev = NULL;
+    ChainedHashNode *current = ht->table[index];
+    ChainedHashNode *prev = NULL;
 
     while (current != NULL)
     {
@@ -167,11 +167,11 @@ int hashTableRemove(HashTable *ht, int key)
     return 0;
 }
 
-HashNode *hashTableSearch(HashTable *ht, int key)
+ChainedHashNode *chainedHashTableSearch(ChainedHashTable *ht, int key)
 {
-    int index = hashFunction(ht->size, key);
+    int index = chainedHashFunction(ht->size, key);
 
-    HashNode *current = ht->table[index];
+    ChainedHashNode *current = ht->table[index];
 
     while (current != NULL)
     {
@@ -186,9 +186,9 @@ HashNode *hashTableSearch(HashTable *ht, int key)
     return NULL;
 }
 
-int hashTableRehash(HashTable *ht, int newSize)
+int chainedHashTableRehash(ChainedHashTable *ht, int newSize)
 {
-    HashNode **newTable = calloc(newSize, sizeof(HashNode *));
+    ChainedHashNode **newTable = calloc(newSize, sizeof(ChainedHashNode *));
 
     if (newTable == NULL)
     {
@@ -197,13 +197,13 @@ int hashTableRehash(HashTable *ht, int newSize)
 
     for (int i = 0; i < ht->size; i++)
     {
-        HashNode *current = ht->table[i];
+        ChainedHashNode *current = ht->table[i];
 
         while (current != NULL)
         {
-            HashNode *next = current->next;
+            ChainedHashNode *next = current->next;
 
-            int newIndex = hashFunction(newSize, current->key);
+            int newIndex = chainedHashFunction(newSize, current->key);
 
             current->next = newTable[newIndex];
             newTable[newIndex] = current;
@@ -220,9 +220,9 @@ int hashTableRehash(HashTable *ht, int newSize)
     return 1;
 }
 
-HashTable *hashTableRehashRealloc(HashTable *ht, int newSize)
+ChainedHashTable *chainedHashTableRehashRealloc(ChainedHashTable *ht, int newSize)
 {
-    HashTable *newHt = hashTableCreate(newSize);
+    ChainedHashTable *newHt = chainedHashTableCreate(newSize);
 
     if (newHt == NULL)
     {
@@ -231,21 +231,21 @@ HashTable *hashTableRehashRealloc(HashTable *ht, int newSize)
 
     for (int i = 0; i < ht->size; i++)
     {
-        HashNode *current = ht->table[i];
+        ChainedHashNode *current = ht->table[i];
 
         while (current != NULL)
         {
-            hashTableInsertNoResize(newHt, current->key);
+            chainedHashTableInsertNoResize(newHt, current->key);
             current = current->next;
         }
     }
 
-    hashTableDestroy(ht);
+    chainedHashTableDestroy(ht);
 
     return newHt;
 }
 
-void hashTableCompare(HashTable *ht1, HashTable *ht2)
+void chainedHashTableCompare(ChainedHashTable *ht1, ChainedHashTable *ht2)
 {
     float loadFactor1 = (float)ht1->count / ht1->size;
     float loadFactor2 = (float)ht2->count / ht2->size;
@@ -260,7 +260,7 @@ void hashTableCompare(HashTable *ht1, HashTable *ht2)
     {
         int chainSize = 0;
 
-        HashNode *current = ht1->table[i];
+        ChainedHashNode *current = ht1->table[i];
 
         while (current != NULL)
         {
@@ -283,7 +283,7 @@ void hashTableCompare(HashTable *ht1, HashTable *ht2)
     {
         int chainSize = 0;
 
-        HashNode *current = ht2->table[i];
+        ChainedHashNode *current = ht2->table[i];
 
         while (current != NULL)
         {

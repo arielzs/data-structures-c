@@ -4,39 +4,77 @@
 /* Ponto de entrada do submenu de hash tables, chamado pelo menu.c */
 void runHashTableMenu(void);
 
-typedef struct HashNode
+/* ===================== Hash Table com encadeamento ===================== */
+
+typedef struct ChainedHashNode
 {
     int key;
-    struct HashNode *next;
-} HashNode;
+    struct ChainedHashNode *next;
+} ChainedHashNode;
 
 typedef struct
 {
     int size;
     int count;
-    HashNode **table;
-} HashTable;
+    ChainedHashNode **table;
+} ChainedHashTable;
 
-HashTable *hashTableCreate(int size);
+ChainedHashTable *chainedHashTableCreate(int size);
 
-/* Esvazia os elementos mas mantem a tabela viva (pode inserir de novo depois) */
-void hashTableClearElements(HashTable *ht);
+/* Esvazia os elementos mas mantem a tabela viva */
+void chainedHashTableClearElements(ChainedHashTable *ht);
 
-/* Libera tudo, incluindo a struct HashTable. O ponteiro fica invalido depois */
-void hashTableDestroy(HashTable *ht);
+/* Libera tudo, incluindo a struct */
+void chainedHashTableDestroy(ChainedHashTable *ht);
 
-void hashTablePrint(HashTable *ht);
-void hashTableInsert(HashTable *ht, int key);
-void hashTableInsertNoResize(HashTable *ht, int key);
-int hashTableRemove(HashTable *ht, int key);
-HashNode *hashTableSearch(HashTable *ht, int key);
+void chainedHashTablePrint(ChainedHashTable *ht);
+void chainedHashTableInsert(ChainedHashTable *ht, int key);
+void chainedHashTableInsertNoResize(ChainedHashTable *ht, int key);
+int chainedHashTableRemove(ChainedHashTable *ht, int key);
+ChainedHashNode *chainedHashTableSearch(ChainedHashTable *ht, int key);
 
-/* Rehash rapido: reaproveita os mesmos nodes, so recria o vetor de baldes */
-int hashTableRehash(HashTable *ht, int newSize);
+/* Reaproveita os nodes existentes, so recria o vetor de baldes */
+int chainedHashTableRehash(ChainedHashTable *ht, int newSize);
 
-/* Rehash "do zero": cria uma tabela nova (com nodes novos) */
-HashTable *hashTableRehashRealloc(HashTable *ht, int newSize);
+/* Cria uma tabela nova, copia as keys, libera a antiga */
+ChainedHashTable *chainedHashTableRehashRealloc(ChainedHashTable *ht, int newSize);
 
-void hashTableCompare(HashTable *ht1, HashTable *ht2);
+void chainedHashTableCompare(ChainedHashTable *ht1, ChainedHashTable *ht2);
+
+/* ===================== Hash Table com enderecamento aberto (hashing duplo) ===================== */
+
+typedef enum
+{
+    SLOT_EMPTY,
+    SLOT_OCCUPIED,
+    SLOT_DELETED
+} SlotStatus;
+
+typedef struct
+{
+    int key;
+    SlotStatus status;
+} DoubleHashSlot;
+
+typedef struct
+{
+    int size;
+    int count;
+    DoubleHashSlot *table;
+} DoubleHashTable;
+
+DoubleHashTable *doubleHashTableCreate(int size);
+void doubleHashTableClearElements(DoubleHashTable *dht);
+void doubleHashTableDestroy(DoubleHashTable *dht);
+void doubleHashTablePrint(DoubleHashTable *dht);
+void doubleHashTableInsert(DoubleHashTable *dht, int key);
+
+
+int doubleHashTableInsertNoResize(DoubleHashTable *dht, int key);
+int doubleHashTableRemove(DoubleHashTable *dht, int key);
+int doubleHashTableSearch(DoubleHashTable *dht, int key);
+int doubleHashTableRehash(DoubleHashTable *dht, int newSize);
+DoubleHashTable *doubleHashTableRehashRealloc(DoubleHashTable *dht, int newSize);
+void doubleHashTableCompare(DoubleHashTable *dht1, DoubleHashTable *dht2);
 
 #endif
