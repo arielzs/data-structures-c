@@ -3,10 +3,21 @@
 #include "array.h"
 #include "sorting.h"
 
+typedef enum
+{
+    ARRAY_DYNAMIC,
+    ARRAY_STATIC
+} ArrayType;
+
 typedef struct
 {
     int id;
-    Array data;
+    ArrayType type;
+    union
+    {
+        DynamicArray dynamic;
+        StaticArray staticArr;
+    } data;
 } ArrayInstance;
 
 static ArrayInstance *arrays = NULL;
@@ -14,7 +25,34 @@ static int totalArrays = 0;
 static int arraysCapacity = 0;
 static int active = -1; /* indice em 'arrays', -1 = nenhum array ativo */
 
-static void createArrayInstance(void)
+static const char *arrayTypeName(ArrayType type)
+{
+    if (type == ARRAY_DYNAMIC)
+    {
+        return "Dinamico";
+    }
+
+    return "Estatico";
+}
+
+/* Devolve o ponteiro pro vetor de inteiros e o tamanho atual do array
+   ativo, independente do tipo. Usado pelos comandos que nao precisam
+   saber qual e o tipo (ex: ordenar). */
+static void getActiveRaw(int **dataOut, int *sizeOut)
+{
+    if (arrays[active].type == ARRAY_DYNAMIC)
+    {
+        *dataOut = arrays[active].data.dynamic.data;
+        *sizeOut = arrays[active].data.dynamic.size;
+    }
+    else
+    {
+        *dataOut = arrays[active].data.staticArr.data;
+        *sizeOut = arrays[active].data.staticArr.size;
+    }
+}
+
+static void createArrayInstance(ArrayType type)
 {
     if (totalArrays == arraysCapacity)
     {
@@ -37,12 +75,21 @@ static void createArrayInstance(void)
     }
 
     arrays[totalArrays].id = totalArrays + 1;
-    arrayCreate(&arrays[totalArrays].data);
+    arrays[totalArrays].type = type;
+
+    if (type == ARRAY_DYNAMIC)
+    {
+        dynamicArrayCreate(&arrays[totalArrays].data.dynamic);
+    }
+    else
+    {
+        staticArrayCreate(&arrays[totalArrays].data.staticArr);
+    }
 
     active = totalArrays;
     totalArrays++;
 
-    printf("Array %d criado e definido como ativo!\n", arrays[active].id);
+    printf("Array %d (%s) criado e definido como ativo!\n", arrays[active].id, arrayTypeName(type));
 }
 
 static void listArrayInstances(void)
@@ -59,11 +106,11 @@ static void listArrayInstances(void)
     {
         if (i == active)
         {
-            printf("Array %d (ativo)\n", arrays[i].id);
+            printf("Array %d - %s (ativo)\n", arrays[i].id, arrayTypeName(arrays[i].type));
         }
         else
         {
-            printf("Array %d\n", arrays[i].id);
+            printf("Array %d - %s\n", arrays[i].id, arrayTypeName(arrays[i].type));
         }
     }
 }
@@ -77,7 +124,7 @@ static void switchArrayInstance(int number)
     }
 
     active = number - 1;
-    printf("Array ativo agora: %d\n", arrays[active].id);
+    printf("Array ativo agora: %d (%s)\n", arrays[active].id, arrayTypeName(arrays[active].type));
 }
 
 static void printSortMenu(void)
@@ -139,9 +186,12 @@ static void sortActiveArray(void)
         return;
     }
 
-    Array *activeArray = &arrays[active].data;
+    int *dataPtr;
+    int sizeVal;
 
-    sortArray(activeArray->data, activeArray->size, type);
+    getActiveRaw(&dataPtr, &sizeVal);
+
+    sortArray(dataPtr, sizeVal, type);
 
     printf("Array ordenado!\n");
 }
@@ -157,7 +207,7 @@ void runArrayMenu(void)
 
         if (active != -1)
         {
-            printf(" | Array ativo: %d", arrays[active].id);
+            printf(" | Array ativo: %d (%s)", arrays[active].id, arrayTypeName(arrays[active].type));
         }
 
         printf(" ===\n");
@@ -175,13 +225,14 @@ void runArrayMenu(void)
         printf("[10] Busca um valor no array\n");
         printf("[11] Conta ocorrencias de um valor\n");
         printf("[12] Copia o array ativo (cria um novo)\n");
-        printf("[13] Compara dois arrays\n");
+        printf("[13] Compara dois arrays (mesmo tipo)\n");
         printf("[14] Remove ocorrencias de um valor\n");
         printf("[15] Remove duplicatas\n");
         printf("[16] Inverte o array\n");
         printf("[17] Mostra o tamanho do array\n");
         printf("[18] Verifica se o array esta vazio\n");
         printf("[19] Ordena o array\n");
+        printf("[20] Verifica se o array esta cheio (somente Estatico)\n");
 
         command = utilsReadInt("Escolha: ");
 
@@ -198,8 +249,24 @@ void runArrayMenu(void)
             break;
 
         case 1:
-            createArrayInstance();
+        {
+            int typeChoice = utilsReadInt("Qual tipo de array?\n[1] Dinamico (cresce sozinho)\n[2] Estatico (capacidade fixa)\n");
+
+            if (typeChoice == 1)
+            {
+                createArrayInstance(ARRAY_DYNAMIC);
+            }
+            else if (typeChoice == 2)
+            {
+                createArrayInstance(ARRAY_STATIC);
+            }
+            else
+            {
+                printf("Tipo invalido!\n");
+            }
+
             break;
+        }
 
         case 2:
             listArrayInstances();
@@ -216,32 +283,66 @@ void runArrayMenu(void)
         }
 
         case 4:
-            arrayPrint(&arrays[active].data);
+            if (arrays[active].type == ARRAY_DYNAMIC)
+            {
+                dynamicArrayPrint(&arrays[active].data.dynamic);
+            }
+            else
+            {
+                staticArrayPrint(&arrays[active].data.staticArr);
+            }
+
             utilsPause();
+
             break;
 
         case 5:
             data = utilsReadInt("Qual elemento deve ser adicionado?\n");
 
-            arrayPush(&arrays[active].data, data);
+            if (arrays[active].type == ARRAY_DYNAMIC)
+            {
+                dynamicArrayPush(&arrays[active].data.dynamic, data);
+            }
+            else
+            {
+                staticArrayPush(&arrays[active].data.staticArr, data);
+            }
 
             printf("Elemento adicionado!\n");
+
             break;
 
         case 6:
             index = utilsReadInt("Qual posicao?\n");
             data = utilsReadInt("Qual elemento?\n");
 
-            arrayInsert(&arrays[active].data, index, data);
+            if (arrays[active].type == ARRAY_DYNAMIC)
+            {
+                dynamicArrayInsert(&arrays[active].data.dynamic, index, data);
+            }
+            else
+            {
+                staticArrayInsert(&arrays[active].data.staticArr, index, data);
+            }
 
             printf("Elemento inserido!\n");
+
             break;
 
         case 7:
         {
             index = utilsReadInt("Qual posicao deve ser removida?\n");
 
-            int removed = arrayRemoveAt(&arrays[active].data, index);
+            int removed;
+
+            if (arrays[active].type == ARRAY_DYNAMIC)
+            {
+                removed = dynamicArrayRemoveAt(&arrays[active].data.dynamic, index);
+            }
+            else
+            {
+                removed = staticArrayRemoveAt(&arrays[active].data.staticArr, index);
+            }
 
             if (removed == -1)
             {
@@ -259,7 +360,16 @@ void runArrayMenu(void)
         {
             index = utilsReadInt("Qual posicao?\n");
 
-            int value = arrayGet(&arrays[active].data, index);
+            int value;
+
+            if (arrays[active].type == ARRAY_DYNAMIC)
+            {
+                value = dynamicArrayGet(&arrays[active].data.dynamic, index);
+            }
+            else
+            {
+                value = staticArrayGet(&arrays[active].data.staticArr, index);
+            }
 
             if (value == -1)
             {
@@ -277,16 +387,33 @@ void runArrayMenu(void)
             index = utilsReadInt("Qual posicao?\n");
             data = utilsReadInt("Qual sera o novo valor?\n");
 
-            arraySet(&arrays[active].data, index, data);
+            if (arrays[active].type == ARRAY_DYNAMIC)
+            {
+                dynamicArraySet(&arrays[active].data.dynamic, index, data);
+            }
+            else
+            {
+                staticArraySet(&arrays[active].data.staticArr, index, data);
+            }
 
             printf("Elemento alterado!\n");
+
             break;
 
         case 10:
         {
             data = utilsReadInt("Qual elemento deve ser procurado?\n");
 
-            int pos = arrayContains(&arrays[active].data, data);
+            int pos;
+
+            if (arrays[active].type == ARRAY_DYNAMIC)
+            {
+                pos = dynamicArrayContains(&arrays[active].data.dynamic, data);
+            }
+            else
+            {
+                pos = staticArrayContains(&arrays[active].data.staticArr, data);
+            }
 
             if (pos == -1)
             {
@@ -304,7 +431,16 @@ void runArrayMenu(void)
         {
             data = utilsReadInt("Qual elemento deve ser contado?\n");
 
-            int count = arrayCountOccurrences(&arrays[active].data, data);
+            int count;
+
+            if (arrays[active].type == ARRAY_DYNAMIC)
+            {
+                count = dynamicArrayCountOccurrences(&arrays[active].data.dynamic, data);
+            }
+            else
+            {
+                count = staticArrayCountOccurrences(&arrays[active].data.staticArr, data);
+            }
 
             printf("O elemento %d aparece %d vez(es) no array\n", data, count);
 
@@ -315,9 +451,18 @@ void runArrayMenu(void)
         {
             int sourceIndex = active;
             int sourceId = arrays[sourceIndex].id;
+            ArrayType type = arrays[sourceIndex].type;
 
-            createArrayInstance();
-            arrayCopy(&arrays[active].data, &arrays[sourceIndex].data);
+            createArrayInstance(type);
+
+            if (type == ARRAY_DYNAMIC)
+            {
+                dynamicArrayCopy(&arrays[active].data.dynamic, &arrays[sourceIndex].data.dynamic);
+            }
+            else
+            {
+                staticArrayCopy(&arrays[active].data.staticArr, &arrays[sourceIndex].data.staticArr);
+            }
 
             printf("Array %d copiado para o novo array %d!\n", sourceId, arrays[active].id);
 
@@ -337,7 +482,27 @@ void runArrayMenu(void)
                 break;
             }
 
-            if (arrayCompare(&arrays[firstNumber - 1].data, &arrays[secondNumber - 1].data))
+            ArrayInstance *first = &arrays[firstNumber - 1];
+            ArrayInstance *second = &arrays[secondNumber - 1];
+
+            if (first->type != second->type)
+            {
+                printf("So da para comparar arrays do mesmo tipo!\n");
+                break;
+            }
+
+            int equal;
+
+            if (first->type == ARRAY_DYNAMIC)
+            {
+                equal = dynamicArrayCompare(&first->data.dynamic, &second->data.dynamic);
+            }
+            else
+            {
+                equal = staticArrayCompare(&first->data.staticArr, &second->data.staticArr);
+            }
+
+            if (equal)
             {
                 printf("Arrays iguais!\n");
             }
@@ -352,29 +517,79 @@ void runArrayMenu(void)
         case 14:
             data = utilsReadInt("Qual elemento deve ser removido?\n");
 
-            arrayRemoveOccurrences(&arrays[active].data, data);
+            if (arrays[active].type == ARRAY_DYNAMIC)
+            {
+                dynamicArrayRemoveOccurrences(&arrays[active].data.dynamic, data);
+            }
+            else
+            {
+                staticArrayRemoveOccurrences(&arrays[active].data.staticArr, data);
+            }
 
             printf("Ocorrencias removidas!\n");
+
             break;
 
         case 15:
-            arrayRemoveDuplicates(&arrays[active].data);
+            if (arrays[active].type == ARRAY_DYNAMIC)
+            {
+                dynamicArrayRemoveDuplicates(&arrays[active].data.dynamic);
+            }
+            else
+            {
+                staticArrayRemoveDuplicates(&arrays[active].data.staticArr);
+            }
 
             printf("Duplicatas removidas!\n");
+
             break;
 
         case 16:
-            arrayReverse(&arrays[active].data);
+            if (arrays[active].type == ARRAY_DYNAMIC)
+            {
+                dynamicArrayReverse(&arrays[active].data.dynamic);
+            }
+            else
+            {
+                staticArrayReverse(&arrays[active].data.staticArr);
+            }
 
             printf("Array invertido!\n");
+
             break;
 
         case 17:
-            printf("Tamanho do array: %d\n", arraySize(&arrays[active].data));
+        {
+            int total;
+
+            if (arrays[active].type == ARRAY_DYNAMIC)
+            {
+                total = dynamicArraySize(&arrays[active].data.dynamic);
+            }
+            else
+            {
+                total = staticArraySize(&arrays[active].data.staticArr);
+            }
+
+            printf("Tamanho do array: %d\n", total);
+
             break;
+        }
 
         case 18:
-            if (arrayIsEmpty(&arrays[active].data))
+        {
+            int empty;
+
+            if (arrays[active].type == ARRAY_DYNAMIC)
+            {
+                empty = dynamicArrayIsEmpty(&arrays[active].data.dynamic);
+            }
+            else
+            {
+                empty = staticArrayIsEmpty(&arrays[active].data.staticArr);
+            }
+
+            if (empty)
             {
                 printf("Array vazio!\n");
             }
@@ -384,9 +599,26 @@ void runArrayMenu(void)
             }
 
             break;
+        }
 
         case 19:
             sortActiveArray();
+            break;
+
+        case 20:
+            if (arrays[active].type != ARRAY_STATIC)
+            {
+                printf("Esse comando so faz sentido para arrays Estaticos!\n");
+            }
+            else if (staticArrayIsFull(&arrays[active].data.staticArr))
+            {
+                printf("Array cheio!\n");
+            }
+            else
+            {
+                printf("Array nao esta cheio!\n");
+            }
+
             break;
 
         default:

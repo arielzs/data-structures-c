@@ -1,70 +1,54 @@
 #include "common.h"
 #include "array.h"
 
-#define INITIAL_CAPACITY 10
-
-void arrayCreate(Array *array)
+void staticArrayCreate(StaticArray *array)
 {
-    array->data = malloc(INITIAL_CAPACITY * sizeof(int));
     array->size = 0;
-    array->capacity = INITIAL_CAPACITY;
 }
 
-void arrayClear(Array *array)
+void staticArrayClear(StaticArray *array)
 {
-    free(array->data);
-    array->data = NULL;
     array->size = 0;
-    array->capacity = 0;
 }
 
-int arrayIsEmpty(Array *array)
+int staticArrayIsEmpty(StaticArray *array)
 {
     return array->size == 0;
 }
 
-int arraySize(Array *array)
+int staticArrayIsFull(StaticArray *array)
+{
+    return array->size == STATIC_ARRAY_CAPACITY;
+}
+
+int staticArraySize(StaticArray *array)
 {
     return array->size;
 }
 
-static void arrayResize(Array *array)
+void staticArrayPush(StaticArray *array, int data)
 {
-    int newCapacity = array->capacity * 2;
-
-    int *temp = realloc(array->data, newCapacity * sizeof(int));
-
-    if (temp == NULL)
+    if (staticArrayIsFull(array))
     {
-        printf("Falha ao alocar memoria!\n");
+        printf("Array cheio!\n");
         return;
-    }
-
-    array->data = temp;
-    array->capacity = newCapacity;
-}
-
-void arrayPush(Array *array, int data)
-{
-    if (array->size == array->capacity)
-    {
-        arrayResize(array);
     }
 
     array->data[array->size] = data;
     array->size++;
 }
 
-void arrayInsert(Array *array, int index, int data)
+void staticArrayInsert(StaticArray *array, int index, int data)
 {
     if (index < 0 || index > array->size)
     {
         return;
     }
 
-    if (array->size == array->capacity)
+    if (staticArrayIsFull(array))
     {
-        arrayResize(array);
+        printf("Array cheio!\n");
+        return;
     }
 
     for (int i = array->size; i > index; i--)
@@ -76,7 +60,7 @@ void arrayInsert(Array *array, int index, int data)
     array->size++;
 }
 
-int arrayRemoveAt(Array *array, int index)
+int staticArrayRemoveAt(StaticArray *array, int index)
 {
     if (index < 0 || index >= array->size)
     {
@@ -95,7 +79,7 @@ int arrayRemoveAt(Array *array, int index)
     return removed;
 }
 
-int arrayGet(Array *array, int index)
+int staticArrayGet(StaticArray *array, int index)
 {
     if (index < 0 || index >= array->size)
     {
@@ -105,7 +89,7 @@ int arrayGet(Array *array, int index)
     return array->data[index];
 }
 
-void arraySet(Array *array, int index, int data)
+void staticArraySet(StaticArray *array, int index, int data)
 {
     if (index < 0 || index >= array->size)
     {
@@ -115,7 +99,7 @@ void arraySet(Array *array, int index, int data)
     array->data[index] = data;
 }
 
-int arrayContains(Array *array, int data)
+int staticArrayContains(StaticArray *array, int data)
 {
     for (int i = 0; i < array->size; i++)
     {
@@ -128,7 +112,7 @@ int arrayContains(Array *array, int data)
     return -1;
 }
 
-int arrayCountOccurrences(Array *array, int data)
+int staticArrayCountOccurrences(StaticArray *array, int data)
 {
     int count = 0;
 
@@ -143,7 +127,7 @@ int arrayCountOccurrences(Array *array, int data)
     return count;
 }
 
-void arrayPrint(Array *array)
+void staticArrayPrint(StaticArray *array)
 {
     printf("[");
 
@@ -160,16 +144,8 @@ void arrayPrint(Array *array)
     printf("]\n");
 }
 
-void arrayCopy(Array *destination, Array *source)
+void staticArrayCopy(StaticArray *destination, StaticArray *source)
 {
-    arrayClear(destination);
-    arrayCreate(destination);
-
-    while (destination->capacity < source->size)
-    {
-        arrayResize(destination);
-    }
-
     for (int i = 0; i < source->size; i++)
     {
         destination->data[i] = source->data[i];
@@ -178,7 +154,7 @@ void arrayCopy(Array *destination, Array *source)
     destination->size = source->size;
 }
 
-int arrayCompare(Array *array1, Array *array2)
+int staticArrayCompare(StaticArray *array1, StaticArray *array2)
 {
     if (array1->size != array2->size)
     {
@@ -196,7 +172,7 @@ int arrayCompare(Array *array1, Array *array2)
     return 1;
 }
 
-void arrayRemoveOccurrences(Array *array, int data)
+void staticArrayRemoveOccurrences(StaticArray *array, int data)
 {
     int i = 0;
 
@@ -204,7 +180,7 @@ void arrayRemoveOccurrences(Array *array, int data)
     {
         if (array->data[i] == data)
         {
-            arrayRemoveAt(array, i);
+            staticArrayRemoveAt(array, i);
         }
         else
         {
@@ -213,7 +189,7 @@ void arrayRemoveOccurrences(Array *array, int data)
     }
 }
 
-void arrayRemoveDuplicates(Array *array)
+void staticArrayRemoveDuplicates(StaticArray *array)
 {
     for (int i = 0; i < array->size; i++)
     {
@@ -223,7 +199,7 @@ void arrayRemoveDuplicates(Array *array)
         {
             if (array->data[i] == array->data[j])
             {
-                arrayRemoveAt(array, j);
+                staticArrayRemoveAt(array, j);
             }
             else
             {
@@ -233,7 +209,7 @@ void arrayRemoveDuplicates(Array *array)
     }
 }
 
-void arrayReverse(Array *array)
+void staticArrayReverse(StaticArray *array)
 {
     int left = 0;
     int right = array->size - 1;
