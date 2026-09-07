@@ -26,3 +26,18 @@ clean:
 	rm -rf bin
 
 .PHONY: all run clean
+
+TEST_SRC = $(wildcard tests/test_*.c)
+TEST_BINS = $(TEST_SRC:tests/%.c=bin/tests/%)
+LIB_SRC = $(filter-out src/main.c, $(filter-out $(wildcard src/**/menu_*.c src/menu.c), $(shell find src -name "*.c")))
+
+test: $(TEST_BINS)
+	@for t in $(TEST_BINS); do \
+		echo "== $$t =="; \
+		$$t || exit 1; \
+	done
+	@echo "Todos os testes passaram!"
+
+bin/tests/%: tests/%.c $(LIB_SRC)
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $< $(LIB_SRC) -o $@
