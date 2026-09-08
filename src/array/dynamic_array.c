@@ -28,7 +28,7 @@ int dynamicArraySize(DynamicArray *array)
     return array->size;
 }
 
-static void dynamicArrayResize(DynamicArray *array)
+static int dynamicArrayResize(DynamicArray *array)
 {
     int newCapacity = array->capacity * 2;
 
@@ -37,34 +37,45 @@ static void dynamicArrayResize(DynamicArray *array)
     if (temp == NULL)
     {
         printf("Falha ao alocar memoria!\n");
-        return;
+        return 0;
     }
 
     array->data = temp;
     array->capacity = newCapacity;
+
+    return 1;
 }
 
-void dynamicArrayPush(DynamicArray *array, int data)
+int dynamicArrayPush(DynamicArray *array, int data)
 {
     if (array->size == array->capacity)
     {
-        dynamicArrayResize(array);
+        if (!dynamicArrayResize(array))
+        {
+            return 0;
+        }
     }
 
     array->data[array->size] = data;
     array->size++;
+
+    return 1;
 }
 
-void dynamicArrayInsert(DynamicArray *array, int index, int data)
+int dynamicArrayInsert(DynamicArray *array, int index, int data)
 {
     if (index < 0 || index > array->size)
     {
-        return;
+        printf("Posicao invalida!\n");
+        return 0;
     }
 
     if (array->size == array->capacity)
     {
-        dynamicArrayResize(array);
+        if (!dynamicArrayResize(array))
+        {
+            return 0;
+        }
     }
 
     for (int i = array->size; i > index; i--)
@@ -74,6 +85,8 @@ void dynamicArrayInsert(DynamicArray *array, int index, int data)
 
     array->data[index] = data;
     array->size++;
+
+    return 1;
 }
 
 int dynamicArrayRemoveAt(DynamicArray *array, int index)
@@ -167,7 +180,10 @@ void dynamicArrayCopy(DynamicArray *destination, DynamicArray *source)
 
     while (destination->capacity < source->size)
     {
-        dynamicArrayResize(destination);
+        if (!dynamicArrayResize(destination))
+        {
+            return;
+        }
     }
 
     for (int i = 0; i < source->size; i++)

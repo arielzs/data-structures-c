@@ -26,29 +26,32 @@ int staticArraySize(StaticArray *array)
     return array->size;
 }
 
-void staticArrayPush(StaticArray *array, int data)
+int staticArrayPush(StaticArray *array, int data)
 {
     if (staticArrayIsFull(array))
     {
         printf("Array cheio!\n");
-        return;
+        return 0;
     }
 
     array->data[array->size] = data;
     array->size++;
+
+    return 1;
 }
 
-void staticArrayInsert(StaticArray *array, int index, int data)
+int staticArrayInsert(StaticArray *array, int index, int data)
 {
     if (index < 0 || index > array->size)
     {
-        return;
+        printf("Posicao invalida!\n");
+        return 0;
     }
 
     if (staticArrayIsFull(array))
     {
         printf("Array cheio!\n");
-        return;
+        return 0;
     }
 
     for (int i = array->size; i > index; i--)
@@ -58,6 +61,8 @@ void staticArrayInsert(StaticArray *array, int index, int data)
 
     array->data[index] = data;
     array->size++;
+
+    return 1;
 }
 
 int staticArrayRemoveAt(StaticArray *array, int index)

@@ -297,37 +297,51 @@ void runArrayMenu(void)
             break;
 
         case 5:
+        {
             data = utilsReadInt("Qual elemento deve ser adicionado?\n");
+
+            int pushed;
 
             if (arrays[active].type == ARRAY_DYNAMIC)
             {
-                dynamicArrayPush(&arrays[active].data.dynamic, data);
+                pushed = dynamicArrayPush(&arrays[active].data.dynamic, data);
             }
             else
             {
-                staticArrayPush(&arrays[active].data.staticArr, data);
+                pushed = staticArrayPush(&arrays[active].data.staticArr, data);
             }
 
-            printf("Elemento adicionado!\n");
+            if (pushed)
+            {
+                printf("Elemento adicionado!\n");
+            }
 
             break;
+        }
 
         case 6:
+        {
             index = utilsReadInt("Qual posicao?\n");
             data = utilsReadInt("Qual elemento?\n");
 
+            int inserted;
+
             if (arrays[active].type == ARRAY_DYNAMIC)
             {
-                dynamicArrayInsert(&arrays[active].data.dynamic, index, data);
+                inserted = dynamicArrayInsert(&arrays[active].data.dynamic, index, data);
             }
             else
             {
-                staticArrayInsert(&arrays[active].data.staticArr, index, data);
+                inserted = staticArrayInsert(&arrays[active].data.staticArr, index, data);
             }
 
-            printf("Elemento inserido!\n");
+            if (inserted)
+            {
+                printf("Elemento inserido!\n");
+            }
 
             break;
+        }
 
         case 7:
         {
