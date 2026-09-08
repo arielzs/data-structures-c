@@ -1,5 +1,6 @@
 #ifndef ARRAY_H
 #define ARRAY_H
+
 /* Ponto de entrada do submenu de arrays, chamado pelo menu.c */
 void runArrayMenu(void);
 

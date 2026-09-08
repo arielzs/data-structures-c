@@ -1,17 +1,15 @@
 CC = gcc
 
-# Inclui a pasta include/ e todas as subpastas de src/ automaticamente,
-# assim "#include \"array.h\"" funciona de qualquer arquivo do projeto,
-# nao importa em que pasta ele esteja (nao precisa editar isso ao criar um novo modulo).
-
-INCLUDE_DIRS = $(shell find src -type d)
-CFLAGS = -Wall -Wextra -std=c11 -Iinclude $(addprefix -I,$(INCLUDE_DIRS))
+# Pega apenas diretórios dentro de include/ e src/
+INCLUDE_DIRS = include $(sort $(dir $(wildcard include/*/))) $(sort $(dir $(wildcard src/*/)))
+CFLAGS = -Wall -Wextra -std=c11 $(addprefix -I,$(INCLUDE_DIRS))
 
 # ===================== Build principal =====================
 
 TARGET = bin/data-structures-c
 
-SRC = $(shell find src -name "*.c")
+# Busca arquivos .c nas pastas principais e subpastas de 1 nível
+SRC = $(wildcard src/*.c) $(wildcard src/*/*.c)
 
 OBJ = $(SRC:src/%.c=bin/%.o)
 
@@ -30,11 +28,8 @@ run: $(TARGET)
 
 # ===================== Testes =====================
 
-# Todo .c de src/, menos main.c (tem seu proprio main, ia conflitar com o
-# main de cada teste) e os menu*.c (nao sao necessarios pra testar a logica pura)
-
-ALL_SRC = $(shell find src -name "*.c")
-MENU_SRC = $(shell find src -name "menu*.c")
+ALL_SRC = $(wildcard src/*.c) $(wildcard src/*/*.c)
+MENU_SRC = $(wildcard src/menu*.c) $(wildcard src/*/menu*.c)
 LIB_SRC = $(filter-out src/main.c $(MENU_SRC), $(ALL_SRC))
 
 TEST_SRC = $(wildcard tests/test_*.c)
@@ -58,8 +53,6 @@ test: $(TEST_BINS)
 	echo "============================================================"; \
 	echo "$$passed passaram, $$failed falharam"; \
 	if [ $$failed -gt 0 ]; then exit 1; fi
-
-# Cada teste vira um binario proprio, compilado direto com o codigo do projeto que ele precisa
 
 bin/tests/%: tests/%.c $(LIB_SRC)
 	@mkdir -p $(dir $@)
