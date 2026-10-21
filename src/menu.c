@@ -8,13 +8,6 @@
 #include "stack.h"      /* declara runStackMenu() */
 #include "tree.h"       /* declara runTreeMenu() */
 
-/* Descomente conforme cada estrutura for sendo implementada.
-   Cada modulo deve expor uma funcao runXxxMenu(void), igual os outros headers fazem. */
-/*
-#include "deque.h"
-#include "graph.h"
-*/
-
 static void printMainMenu(void)
 {
     printf("\n=== DATA STRUCTURES C ===\n");
