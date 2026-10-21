@@ -35,7 +35,7 @@ void stackPush(Stack *s, int data)
 
     if (newNode == NULL)
     {
-        printf("Erro ao alocar memoria!\n");
+        printf("Memory allocation failed!\n");
         return;
     }
 
@@ -50,7 +50,7 @@ void stackPop(Stack *s)
 {
     if (stackIsEmpty(s))
     {
-        printf("Pilha vazia!\n");
+        printf("Stack is empty!\n");
         return;
     }
 
@@ -67,7 +67,7 @@ void stackPopMultiple(Stack *s, int quantity)
 {
     if (quantity <= 0)
     {
-        printf("Quantidade invalida!\n");
+        printf("Invalid quantity!\n");
         return;
     }
 
@@ -79,20 +79,20 @@ void stackPopMultiple(Stack *s, int quantity)
         removed++;
     }
 
-    printf("%d Elemento(s) removido(s)!\n", removed);
+    printf("%d element(s) removed!\n", removed);
 }
 
 void stackPrint(Stack *s)
 {
     if (stackIsEmpty(s))
     {
-        printf("Pilha vazia!\n");
+        printf("Stack is empty!\n");
         return;
     }
 
     StackNode *temp = s->top;
 
-    printf("\n TOPO\n");
+    printf("\n TOP\n");
     printf("  |\n");
 
     while (temp != NULL)
@@ -104,14 +104,14 @@ void stackPrint(Stack *s)
 
     printf(" NULL\n");
     printf("\n--------\n");
-    printf("\nTamanho da pilha: %d\n", s->size);
+    printf("\nStack size: %d\n", s->size);
 }
 
 void stackSearch(Stack *s, int data)
 {
     if (stackIsEmpty(s))
     {
-        printf("Pilha Vazia!\n");
+        printf("Stack is empty!\n");
         return;
     }
 
@@ -126,11 +126,11 @@ void stackSearch(Stack *s, int data)
 
     if (temp == NULL)
     {
-        printf("Elemento %d nao encontrado!\n", data);
+        printf("Element %d not found!\n", data);
     }
     else
     {
-        printf("Elemento %d encontrado na posicao %d!\n", data, pos + 1);
+        printf("Element %d found at position %d!\n", data, pos + 1);
     }
 }
 
@@ -157,7 +157,7 @@ void stackRemoveOccurrences(Stack *s, int data)
 {
     if (stackIsEmpty(s))
     {
-        printf("Pilha Vazia!\n");
+        printf("Stack is empty!\n");
         return;
     }
 
@@ -195,11 +195,11 @@ void stackRemoveOccurrences(Stack *s, int data)
 
     if (quantity == 0)
     {
-        printf("Elemento %d nao encontrado!\n", data);
+        printf("Element %d not found!\n", data);
     }
     else
     {
-        printf("%d Elementos removidos!\n", quantity);
+        printf("%d element(s) removed!\n", quantity);
     }
 }
 
@@ -347,7 +347,8 @@ void stackSort(Stack *s)
         stackPush(&aux, temp);
     }
 
-    stackCopy(s, &aux);
+    s->top = aux.top;
+    s->size = aux.size;
 }
 
 void stackRotate(Stack *s)

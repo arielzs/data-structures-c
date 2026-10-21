@@ -13,7 +13,7 @@ static int totalStacks = 0;
 static int stacksCapacity = 0;
 static int active = -1; /* indice em 'stacks', -1 = nenhuma pilha ativa */
 
-static void createStackInstance(void)
+static void createStackInstance()
 {
     if (totalStacks == stacksCapacity)
     {
@@ -30,7 +30,7 @@ static void createStackInstance(void)
 
         if (stacks == NULL)
         {
-            printf("Erro ao alocar memoria\n");
+            printf("Memory allocation failed\n");
             exit(1);
         }
     }
@@ -41,28 +41,28 @@ static void createStackInstance(void)
     active = totalStacks;
     totalStacks++;
 
-    printf("Pilha %d criada e definida como ativa!\n", stacks[active].id);
+    printf("Stack %d created and set as active!\n", stacks[active].id);
 }
 
-static void listStackInstances(void)
+static void listStackInstances()
 {
     if (totalStacks == 0)
     {
-        printf("Nenhuma pilha criada ainda. Use o comando [1] para criar uma.\n");
+        printf("No stacks created yet. Use command [1] to create one.\n");
         return;
     }
 
-    printf("=== Pilhas criadas ===\n");
+    printf("=== Created stacks ===\n");
 
     for (int i = 0; i < totalStacks; i++)
     {
         if (i == active)
         {
-            printf("Pilha %d (ativa)\n", stacks[i].id);
+            printf("Stack %d (active)\n", stacks[i].id);
         }
         else
         {
-            printf("Pilha %d\n", stacks[i].id);
+            printf("Stack %d\n", stacks[i].id);
         }
     }
 }
@@ -71,59 +71,59 @@ static void switchStackInstance(int number)
 {
     if (number < 1 || number > totalStacks)
     {
-        printf("Pilha invalida!\n");
+        printf("Invalid stack!\n");
         return;
     }
 
     active = number - 1;
-    printf("Pilha ativa agora: %d\n", stacks[active].id);
+    printf("Active stack is now: %d\n", stacks[active].id);
 }
 
-void runStackMenu(void)
+void runStackMenu()
 {
     int command, data, k;
     int running = 1;
 
     while (running)
     {
-        printf("\n=== MENU PILHAS");
+        printf("\n=== STACKS MENU");
 
         if (active != -1)
         {
-            printf(" | Pilha ativa: %d", stacks[active].id);
+            printf(" | Active stack: %d", stacks[active].id);
         }
 
         printf(" ===\n");
 
-        printf("[0] Voltar ao menu principal\n");
-        printf("[1] Cria uma nova pilha\n");
-        printf("[2] Lista as pilhas criadas\n");
-        printf("[3] Troca a pilha ativa\n");
-        printf("[4] Insere elementos\n");
-        printf("[5] Remove elementos\n");
-        printf("[6] Remove ocorrencias\n");
-        printf("[7] Procura elemento\n");
-        printf("[8] Conta ocorrencias de um elemento\n");
-        printf("[9] Inverte a pilha ativa\n");
-        printf("[10] Mostra a pilha atual\n");
-        printf("[11] Copia a pilha ativa (cria uma nova)\n");
-        printf("[12] Compara duas pilhas\n");
-        printf("[13] Junta o topo de duas pilhas\n");
-        printf("[14] Junta o fim de duas pilhas\n");
-        printf("[15] Ordena a pilha (insertion sort)\n");
-        printf("[16] Troca o topo (dois primeiros elementos)\n");
-        printf("[17] Move o topo K posicoes para baixo\n");
-        printf("[18] Rotaciona a pilha\n");
-        printf("[19] Rotaciona a pilha K vezes\n");
-        printf("[20] Ordena com Merge Sort\n");
-        printf("[21] Remove o elemento do meio\n");
-        printf("[22] Verifica se uma expressao esta balanceada\n");
+        printf("[0] Back to main menu\n");
+        printf("[1] Create a new stack\n");
+        printf("[2] List the created stacks\n");
+        printf("[3] Switch the active stack\n");
+        printf("[4] Insert elements\n");
+        printf("[5] Remove elements\n");
+        printf("[6] Remove occurrences\n");
+        printf("[7] Search for an element\n");
+        printf("[8] Count occurrences of an element\n");
+        printf("[9] Reverse the active stack\n");
+        printf("[10] Show the current stack\n");
+        printf("[11] Copy the active stack (creates a new one)\n");
+        printf("[12] Compare two stacks\n");
+        printf("[13] Merge the tops of two stacks\n");
+        printf("[14] Merge the bottoms of two stacks\n");
+        printf("[15] Sort the stack (insertion sort)\n");
+        printf("[16] Swap the top (first two elements)\n");
+        printf("[17] Move the top K positions down\n");
+        printf("[18] Rotate the stack\n");
+        printf("[19] Rotate the stack K times\n");
+        printf("[20] Sort with Merge Sort\n");
+        printf("[21] Remove the middle element\n");
+        printf("[22] Check if an expression is balanced\n");
 
-        command = utilsReadInt("Escolha: ");
+        command = utilsReadInt("Choice: ");
 
         if (active == -1 && command != 0 && command != 1 && command != 2)
         {
-            printf("Voce precisa criar uma pilha primeiro! (comando 1)\n");
+            printf("You need to create a stack first! (command 1)\n");
             continue;
         }
 
@@ -145,7 +145,7 @@ void runStackMenu(void)
         {
             listStackInstances();
 
-            int number = utilsReadInt("Qual pilha deseja ativar?\n");
+            int number = utilsReadInt("Which stack do you want to activate?\n");
 
             switchStackInstance(number);
             break;
@@ -153,25 +153,25 @@ void runStackMenu(void)
 
         case 4:
         {
-            int quantity = utilsReadInt("Quantos elementos devem ser adicionados?\n");
+            int quantity = utilsReadInt("How many elements should be added?\n");
 
             if (quantity <= 0)
             {
-                printf("Quantidade invalida!\n");
+                printf("Invalid quantity!\n");
                 break;
             }
 
             for (int i = 0; i < quantity; i++)
             {
                 char prompt[32];
-                snprintf(prompt, sizeof(prompt), "Elemento %d:\n", i + 1);
+                snprintf(prompt, sizeof(prompt), "Element %d:\n", i + 1);
 
                 data = utilsReadInt(prompt);
 
                 stackPush(&stacks[active].data, data);
             }
 
-            printf("%d Elemento(s) adicionado(s)!\n", quantity);
+            printf("%d element(s) added!\n", quantity);
 
             break;
         }
@@ -179,11 +179,11 @@ void runStackMenu(void)
         case 5:
             if (stackIsEmpty(&stacks[active].data))
             {
-                printf("Pilha vazia!\n");
+                printf("Stack is empty!\n");
             }
             else
             {
-                int quantity = utilsReadInt("Quantos elementos devem ser removidos?\n");
+                int quantity = utilsReadInt("How many elements should be removed?\n");
 
                 stackPopMultiple(&stacks[active].data, quantity);
             }
@@ -191,14 +191,14 @@ void runStackMenu(void)
             break;
 
         case 6:
-            data = utilsReadInt("Qual ocorrencia deve ser removida?\n");
+            data = utilsReadInt("Which value should have its occurrences removed?\n");
 
             stackRemoveOccurrences(&stacks[active].data, data);
 
             break;
 
         case 7:
-            data = utilsReadInt("Qual elemento deve ser buscado?\n");
+            data = utilsReadInt("Which element should be searched?\n");
 
             stackSearch(&stacks[active].data, data);
 
@@ -206,11 +206,11 @@ void runStackMenu(void)
 
         case 8:
         {
-            data = utilsReadInt("Qual elemento deve ser contado?\n");
+            data = utilsReadInt("Which element should be counted?\n");
 
             int count = stackCountOccurrences(&stacks[active].data, data);
 
-            printf("O elemento %d aparece %d vez(es)!\n", data, count);
+            printf("Element %d appears %d time(s)!\n", data, count);
 
             break;
         }
@@ -218,11 +218,11 @@ void runStackMenu(void)
         case 9:
             if (stackReverse(&stacks[active].data))
             {
-                printf("Pilha invertida!\n");
+                printf("Stack reversed!\n");
             }
             else
             {
-                printf("Pilha vazia!\n");
+                printf("Stack is empty!\n");
             }
 
             break;
@@ -241,7 +241,7 @@ void runStackMenu(void)
             createStackInstance();
             stackCopy(&stacks[active].data, &stacks[sourceIndex].data);
 
-            printf("Pilha %d copiada para a nova pilha %d!\n", sourceId, stacks[active].id);
+            printf("Stack %d copied to new stack %d!\n", sourceId, stacks[active].id);
 
             break;
         }
@@ -250,22 +250,22 @@ void runStackMenu(void)
         {
             listStackInstances();
 
-            int firstNumber = utilsReadInt("Primeira pilha:\n");
-            int secondNumber = utilsReadInt("Segunda pilha:\n");
+            int firstNumber = utilsReadInt("First stack:\n");
+            int secondNumber = utilsReadInt("Second stack:\n");
 
             if (firstNumber < 1 || firstNumber > totalStacks || secondNumber < 1 || secondNumber > totalStacks)
             {
-                printf("Pilha invalida!\n");
+                printf("Invalid stack!\n");
                 break;
             }
 
             if (stackCompare(&stacks[firstNumber - 1].data, &stacks[secondNumber - 1].data))
             {
-                printf("Pilhas iguais!\n");
+                printf("Stacks are equal!\n");
             }
             else
             {
-                printf("Pilhas diferentes!\n");
+                printf("Stacks are different!\n");
             }
 
             break;
@@ -275,17 +275,17 @@ void runStackMenu(void)
         {
             listStackInstances();
 
-            int otherNumber = utilsReadInt("Juntar com qual pilha (o topo dela entra no topo da ativa)?\n");
+            int otherNumber = utilsReadInt("Merge with which stack (its top goes on top of the active one)?\n");
 
             if (otherNumber < 1 || otherNumber > totalStacks)
             {
-                printf("Pilha invalida!\n");
+                printf("Invalid stack!\n");
                 break;
             }
 
             stackMergeTop(&stacks[active].data, &stacks[otherNumber - 1].data);
 
-            printf("Pilhas unidas!\n");
+            printf("Stacks merged!\n");
 
             break;
         }
@@ -294,17 +294,17 @@ void runStackMenu(void)
         {
             listStackInstances();
 
-            int otherNumber = utilsReadInt("Juntar com qual pilha (ela vai para o fundo da ativa)?\n");
+            int otherNumber = utilsReadInt("Merge with which stack (it goes to the bottom of the active one)?\n");
 
             if (otherNumber < 1 || otherNumber > totalStacks)
             {
-                printf("Pilha invalida!\n");
+                printf("Invalid stack!\n");
                 break;
             }
 
             stackMergeBottom(&stacks[active].data, &stacks[otherNumber - 1].data);
 
-            printf("Pilhas unidas!\n");
+            printf("Stacks merged!\n");
 
             break;
         }
@@ -312,53 +312,53 @@ void runStackMenu(void)
         case 15:
             stackSort(&stacks[active].data);
 
-            printf("Pilha ordenada!\n");
+            printf("Stack sorted!\n");
 
             break;
 
         case 16:
             stackSwapTop(&stacks[active].data);
 
-            printf("Topo trocado\n");
+            printf("Top swapped\n");
 
             break;
 
         case 17:
-            k = utilsReadInt("Quantas posicoes?\n");
+            k = utilsReadInt("How many positions?\n");
 
             stackMoveTopDown(&stacks[active].data, k);
 
-            printf("Topo movido %d posicoes\n", k);
+            printf("Top moved %d positions\n", k);
 
             break;
 
         case 18:
             stackRotate(&stacks[active].data);
 
-            printf("Pilha rotacionada\n");
+            printf("Stack rotated\n");
 
             break;
 
         case 19:
-            k = utilsReadInt("Quantas vezes?\n");
+            k = utilsReadInt("How many times?\n");
 
             stackRotateK(&stacks[active].data, k);
 
-            printf("Pilha rotacionada %d vezes\n", k);
+            printf("Stack rotated %d times\n", k);
 
             break;
 
         case 20:
             stackMergeSort(&stacks[active].data);
 
-            printf("Pilha ordenada!\n");
+            printf("Stack sorted!\n");
 
             break;
 
         case 21:
             stackRemoveMiddle(&stacks[active].data);
 
-            printf("Elemento do meio removido\n");
+            printf("Middle element removed\n");
 
             break;
 
@@ -366,22 +366,22 @@ void runStackMenu(void)
         {
             char expr[100];
 
-            utilsReadLine("Digite a expressao: ", expr, sizeof(expr));
+            utilsReadLine("Enter the expression: ", expr, sizeof(expr));
 
             if (stackVerifyBalance(expr))
             {
-                printf("Expressao valida!\n");
+                printf("Valid expression!\n");
             }
             else
             {
-                printf("Expressao invalida!\n");
+                printf("Invalid expression!\n");
             }
 
             break;
         }
 
         default:
-            printf("Insira um comando valido!\n");
+            printf("Enter a valid command!\n");
             break;
         }
     }

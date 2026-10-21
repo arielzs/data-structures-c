@@ -7,7 +7,7 @@ AVLNode *createNodeAVL(int data)
 
     if (newNode == NULL)
     {
-        printf("Erro ao alocar memoria\n");
+        printf("Memory allocation failed\n");
         return NULL;
     }
 
@@ -167,7 +167,7 @@ AVLNode *insertAVL(AVLNode *root, int data)
     }
     else
     {
-        printf("Valor Repetido\n");
+        printf("Duplicate value\n");
         return root;
     }
 
@@ -178,7 +178,7 @@ AVLNode *removeAVL(AVLNode *root, int data)
 {
     if (root == NULL)
     {
-        printf("Elemento nao encontrado\n");
+        printf("Element not found\n");
         return NULL;
     }
 

@@ -2,7 +2,7 @@
 #define ARRAY_H
 
 /* Ponto de entrada do submenu de arrays, chamado pelo menu.c */
-void runArrayMenu(void);
+void runArrayMenu();
 
 /* ===================== Array Dinamico (em dynamic_array.c) ===================== */
 

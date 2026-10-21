@@ -30,7 +30,7 @@ int staticArrayPush(StaticArray *array, int data)
 {
     if (staticArrayIsFull(array))
     {
-        printf("Array cheio!\n");
+        printf("Array is full!\n");
         return 0;
     }
 
@@ -44,13 +44,13 @@ int staticArrayInsert(StaticArray *array, int index, int data)
 {
     if (index < 0 || index > array->size)
     {
-        printf("Posicao invalida!\n");
+        printf("Invalid position!\n");
         return 0;
     }
 
     if (staticArrayIsFull(array))
     {
-        printf("Array cheio!\n");
+        printf("Array is full!\n");
         return 0;
     }
 

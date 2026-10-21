@@ -2,7 +2,7 @@
 #define STACK_H
 
 /* Ponto de entrada do submenu de pilhas, chamado pelo menu.c */
-void runStackMenu(void);
+void runStackMenu();
 
 typedef struct StackNode
 {

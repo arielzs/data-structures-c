@@ -25,11 +25,11 @@ static const char *heapTypeName(HeapType type)
 
 static void createHeapInstance(HeapType type)
 {
-    int capacity = utilsReadInt("Qual a capacidade inicial?\n");
+    int capacity = utilsReadInt("Initial capacity?\n");
 
     if (capacity <= 0)
     {
-        printf("Capacidade invalida!\n");
+        printf("Invalid capacity!\n");
         return;
     }
 
@@ -46,7 +46,7 @@ static void createHeapInstance(HeapType type)
 
     if (heap == NULL)
     {
-        printf("Erro ao criar a heap\n");
+        printf("Error creating the heap\n");
         return;
     }
 
@@ -65,7 +65,7 @@ static void createHeapInstance(HeapType type)
 
         if (heaps == NULL)
         {
-            printf("Erro ao alocar memoria\n");
+            printf("Memory allocation failed\n");
             exit(1);
         }
     }
@@ -76,24 +76,24 @@ static void createHeapInstance(HeapType type)
     active = totalHeaps;
     totalHeaps++;
 
-    printf("Heap %d (%s) criada e definida como ativa!\n", heaps[active].id, heapTypeName(type));
+    printf("Heap %d (%s) created and set as active!\n", heaps[active].id, heapTypeName(type));
 }
 
-static void listHeapInstances(void)
+static void listHeapInstances()
 {
     if (totalHeaps == 0)
     {
-        printf("Nenhuma heap criada ainda. Use o comando [1] para criar uma.\n");
+        printf("No heaps created yet. Use command [1] to create one.\n");
         return;
     }
 
-    printf("=== Heaps criadas ===\n");
+    printf("=== Created heaps ===\n");
 
     for (int i = 0; i < totalHeaps; i++)
     {
         if (i == active)
         {
-            printf("Heap %d - %s (ativa)\n", heaps[i].id, heapTypeName(heaps[i].heap->type));
+            printf("Heap %d - %s (active)\n", heaps[i].id, heapTypeName(heaps[i].heap->type));
         }
         else
         {
@@ -106,47 +106,47 @@ static void switchHeapInstance(int number)
 {
     if (number < 1 || number > totalHeaps)
     {
-        printf("Heap invalida!\n");
+        printf("Invalid heap!\n");
         return;
     }
 
     active = number - 1;
-    printf("Heap ativa agora: %d (%s)\n", heaps[active].id, heapTypeName(heaps[active].heap->type));
+    printf("Active heap is now: %d (%s)\n", heaps[active].id, heapTypeName(heaps[active].heap->type));
 }
 
-void runHeapMenu(void)
+void runHeapMenu()
 {
     int command, data;
     int running = 1;
 
     while (running)
     {
-        printf("\n=== MENU HEAPS");
+        printf("\n=== HEAPS MENU");
 
         if (active != -1)
         {
-            printf(" | Heap ativa: %d (%s)", heaps[active].id, heapTypeName(heaps[active].heap->type));
+            printf(" | Active heap: %d (%s)", heaps[active].id, heapTypeName(heaps[active].heap->type));
         }
 
         printf(" ===\n");
 
-        printf("[0] Voltar ao menu principal\n");
-        printf("[1] Cria uma nova heap\n");
-        printf("[2] Lista as heaps criadas\n");
-        printf("[3] Troca a heap ativa\n");
-        printf("[4] Mostra a heap atual\n");
-        printf("[5] Insere elemento\n");
-        printf("[6] Extrai o topo (maior na Max-Heap, menor na Min-Heap)\n");
-        printf("[7] Atualiza um elemento\n");
-        printf("[8] Aumenta a capacidade\n");
-        printf("[9] Ordena com HeapSort\n");
-        printf("[10] Transforma o vetor em Heap (BuildHeap)\n");
+        printf("[0] Back to main menu\n");
+        printf("[1] Create a new heap\n");
+        printf("[2] List the created heaps\n");
+        printf("[3] Switch the active heap\n");
+        printf("[4] Show the current heap\n");
+        printf("[5] Insert element\n");
+        printf("[6] Extract the top (largest in Max-Heap, smallest in Min-Heap)\n");
+        printf("[7] Update an element\n");
+        printf("[8] Increase the capacity\n");
+        printf("[9] Sort with HeapSort\n");
+        printf("[10] Turn the array into a heap (BuildHeap)\n");
 
-        command = utilsReadInt("Escolha: ");
+        command = utilsReadInt("Choice: ");
 
         if (active == -1 && command != 0 && command != 1 && command != 2)
         {
-            printf("Voce precisa criar uma heap primeiro! (comando 1)\n");
+            printf("You need to create a heap first! (command 1)\n");
             continue;
         }
 
@@ -158,7 +158,7 @@ void runHeapMenu(void)
 
         case 1:
         {
-            int typeChoice = utilsReadInt("Qual tipo de heap?\n[1] Max-Heap\n[2] Min-Heap\n");
+            int typeChoice = utilsReadInt("Which type of heap?\n[1] Max-Heap\n[2] Min-Heap\n");
 
             if (typeChoice == 1)
             {
@@ -170,7 +170,7 @@ void runHeapMenu(void)
             }
             else
             {
-                printf("Tipo invalido!\n");
+                printf("Invalid type!\n");
             }
 
             break;
@@ -184,7 +184,7 @@ void runHeapMenu(void)
         {
             listHeapInstances();
 
-            int number = utilsReadInt("Qual heap deseja ativar?\n");
+            int number = utilsReadInt("Which heap do you want to activate?\n");
 
             switchHeapInstance(number);
             break;
@@ -205,7 +205,7 @@ void runHeapMenu(void)
             break;
 
         case 5:
-            data = utilsReadInt("Qual elemento?\n");
+            data = utilsReadInt("Which element?\n");
 
             if (heaps[active].heap->type == HEAP_MAX)
             {
@@ -234,19 +234,19 @@ void runHeapMenu(void)
 
             if (!ok)
             {
-                printf("Erro: nao foi possivel extrair o topo\n");
+                printf("Error: could not extract the top\n");
                 break;
             }
 
-            printf("Valor extraido: %d\n", top);
+            printf("Extracted value: %d\n", top);
 
             break;
         }
 
         case 7:
         {
-            int index = utilsReadInt("Em qual index?\n");
-            int newData = utilsReadInt("Para qual valor?\n");
+            int index = utilsReadInt("Which index?\n");
+            int newData = utilsReadInt("To which value?\n");
 
             int ok;
 
@@ -261,18 +261,18 @@ void runHeapMenu(void)
 
             if (!ok)
             {
-                printf("Erro: nao foi possivel atualizar\n");
+                printf("Error: could not update\n");
                 break;
             }
 
-            printf("Alteracao feita!\n");
+            printf("Update done!\n");
 
             break;
         }
 
         case 8:
         {
-            int newCapacity = utilsReadInt("Qual a nova capacidade?\n");
+            int newCapacity = utilsReadInt("New capacity?\n");
             int ok;
 
             if (heaps[active].heap->type == HEAP_MAX)
@@ -286,11 +286,11 @@ void runHeapMenu(void)
 
             if (!ok)
             {
-                printf("Erro no ReSize\n");
+                printf("Resize error\n");
                 break;
             }
 
-            printf("Capacidade alterada!\n");
+            printf("Capacity changed!\n");
 
             break;
         }
@@ -298,20 +298,20 @@ void runHeapMenu(void)
         case 9:
             if (!heaps[active].heap->isHeap)
             {
-                printf("Erro: o vetor atual nao e uma Heap\n");
-                printf("Faca BuildHeap primeiro\n");
+                printf("Error: the current array is not a heap\n");
+                printf("Run BuildHeap first\n");
                 break;
             }
 
             if (heaps[active].heap->type == HEAP_MAX)
             {
                 maxHeapSort(heaps[active].heap);
-                printf("Vetor ordenado (crescente)!\n");
+                printf("Array sorted (ascending)!\n");
             }
             else
             {
                 minHeapSort(heaps[active].heap);
-                printf("Vetor ordenado (decrescente)!\n");
+                printf("Array sorted (descending)!\n");
             }
 
             break;
@@ -326,12 +326,12 @@ void runHeapMenu(void)
                 minHeapBuild(heaps[active].heap);
             }
 
-            printf("Heap construida!\n");
+            printf("Heap built!\n");
 
             break;
 
         default:
-            printf("Insira um comando valido!\n");
+            printf("Enter a valid command!\n");
             break;
         }
     }

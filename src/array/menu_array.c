@@ -29,10 +29,10 @@ static const char *arrayTypeName(ArrayType type)
 {
     if (type == ARRAY_DYNAMIC)
     {
-        return "Dinamico";
+        return "Dynamic";
     }
 
-    return "Estatico";
+    return "Static";
 }
 
 /* Devolve o ponteiro pro vetor de inteiros e o tamanho atual do array
@@ -69,7 +69,7 @@ static void createArrayInstance(ArrayType type)
 
         if (arrays == NULL)
         {
-            printf("Erro ao alocar memoria\n");
+            printf("Memory allocation failed\n");
             exit(1);
         }
     }
@@ -89,24 +89,24 @@ static void createArrayInstance(ArrayType type)
     active = totalArrays;
     totalArrays++;
 
-    printf("Array %d (%s) criado e definido como ativo!\n", arrays[active].id, arrayTypeName(type));
+    printf("Array %d (%s) created and set as active!\n", arrays[active].id, arrayTypeName(type));
 }
 
-static void listArrayInstances(void)
+static void listArrayInstances()
 {
     if (totalArrays == 0)
     {
-        printf("Nenhum array criado ainda. Use o comando [1] para criar um.\n");
+        printf("No arrays created yet. Use command [1] to create one.\n");
         return;
     }
 
-    printf("=== Arrays criados ===\n");
+    printf("=== Created arrays ===\n");
 
     for (int i = 0; i < totalArrays; i++)
     {
         if (i == active)
         {
-            printf("Array %d - %s (ativo)\n", arrays[i].id, arrayTypeName(arrays[i].type));
+            printf("Array %d - %s (active)\n", arrays[i].id, arrayTypeName(arrays[i].type));
         }
         else
         {
@@ -119,32 +119,32 @@ static void switchArrayInstance(int number)
 {
     if (number < 1 || number > totalArrays)
     {
-        printf("Array invalido!\n");
+        printf("Invalid array!\n");
         return;
     }
 
     active = number - 1;
-    printf("Array ativo agora: %d (%s)\n", arrays[active].id, arrayTypeName(arrays[active].type));
+    printf("Active array is now: %d (%s)\n", arrays[active].id, arrayTypeName(arrays[active].type));
 }
 
-static void printSortMenu(void)
+static void printSortMenu()
 {
-    printf("\nQual algoritmo de ordenacao?\n");
+    printf("\nWhich sorting algorithm?\n");
     printf("[1] Bubble Sort\n");
     printf("[2] Selection Sort\n");
     printf("[3] Insertion Sort\n");
-    printf("[4] Counting Sort (somente valores nao negativos)\n");
+    printf("[4] Counting Sort\n");
     printf("[5] Merge Sort\n");
-    printf("[6] Quick Sort (particao de Lomuto)\n");
-    printf("[7] Quick Sort (particao de Hoare)\n");
+    printf("[6] Quick Sort (Lomuto partition)\n");
+    printf("[7] Quick Sort (Hoare partition)\n");
     printf("[8] Heap Sort\n");
 }
 
-static void sortActiveArray(void)
+static void sortActiveArray()
 {
     printSortMenu();
 
-    int choice = utilsReadInt("Escolha: ");
+    int choice = utilsReadInt("Choice: ");
     SortType type;
 
     switch (choice)
@@ -182,7 +182,7 @@ static void sortActiveArray(void)
         break;
 
     default:
-        printf("Algoritmo invalido!\n");
+        printf("Invalid algorithm!\n");
         return;
     }
 
@@ -193,52 +193,52 @@ static void sortActiveArray(void)
 
     sortArray(dataPtr, sizeVal, type);
 
-    printf("Array ordenado!\n");
+    printf("Array sorted!\n");
 }
 
-void runArrayMenu(void)
+void runArrayMenu()
 {
     int command, data, index;
     int running = 1;
 
     while (running)
     {
-        printf("\n=== MENU ARRAYS");
+        printf("\n=== ARRAYS MENU");
 
         if (active != -1)
         {
-            printf(" | Array ativo: %d (%s)", arrays[active].id, arrayTypeName(arrays[active].type));
+            printf(" | Active array: %d (%s)", arrays[active].id, arrayTypeName(arrays[active].type));
         }
 
         printf(" ===\n");
 
-        printf("[0] Voltar ao menu principal\n");
-        printf("[1] Cria um novo array\n");
-        printf("[2] Lista os arrays criados\n");
-        printf("[3] Troca o array ativo\n");
-        printf("[4] Mostra o array atual\n");
-        printf("[5] Insere no fim do array\n");
-        printf("[6] Insere em uma posicao\n");
-        printf("[7] Remove de uma posicao\n");
-        printf("[8] Mostra elemento de uma posicao\n");
-        printf("[9] Altera elemento de uma posicao\n");
-        printf("[10] Busca um valor no array\n");
-        printf("[11] Conta ocorrencias de um valor\n");
-        printf("[12] Copia o array ativo (cria um novo)\n");
-        printf("[13] Compara dois arrays (mesmo tipo)\n");
-        printf("[14] Remove ocorrencias de um valor\n");
-        printf("[15] Remove duplicatas\n");
-        printf("[16] Inverte o array\n");
-        printf("[17] Mostra o tamanho do array\n");
-        printf("[18] Verifica se o array esta vazio\n");
-        printf("[19] Ordena o array\n");
-        printf("[20] Verifica se o array esta cheio (somente Estatico)\n");
+        printf("[0] Back to main menu\n");
+        printf("[1] Create a new array\n");
+        printf("[2] List the created arrays\n");
+        printf("[3] Switch the active array\n");
+        printf("[4] Show the current array\n");
+        printf("[5] Insert at the end of the array\n");
+        printf("[6] Insert at a position\n");
+        printf("[7] Remove from a position\n");
+        printf("[8] Show the element at a position\n");
+        printf("[9] Change the element at a position\n");
+        printf("[10] Search for a value in the array\n");
+        printf("[11] Count occurrences of a value\n");
+        printf("[12] Copy the active array (creates a new one)\n");
+        printf("[13] Compare two arrays (same type)\n");
+        printf("[14] Remove occurrences of a value\n");
+        printf("[15] Remove duplicates\n");
+        printf("[16] Reverse the array\n");
+        printf("[17] Show the array size\n");
+        printf("[18] Check if the array is empty\n");
+        printf("[19] Sort the array\n");
+        printf("[20] Check if the array is full (static only)\n");
 
-        command = utilsReadInt("Escolha: ");
+        command = utilsReadInt("Choice: ");
 
         if (active == -1 && command != 0 && command != 1 && command != 2)
         {
-            printf("Voce precisa criar um array primeiro! (comando 1)\n");
+            printf("You need to create an array first! (command 1)\n");
             continue;
         }
 
@@ -250,7 +250,7 @@ void runArrayMenu(void)
 
         case 1:
         {
-            int typeChoice = utilsReadInt("Qual tipo de array?\n[1] Dinamico (cresce sozinho)\n[2] Estatico (capacidade fixa)\n");
+            int typeChoice = utilsReadInt("Which type of array?\n[1] Dynamic (grows by itself)\n[2] Static (fixed capacity)\n");
 
             if (typeChoice == 1)
             {
@@ -262,7 +262,7 @@ void runArrayMenu(void)
             }
             else
             {
-                printf("Tipo invalido!\n");
+                printf("Invalid type!\n");
             }
 
             break;
@@ -276,7 +276,7 @@ void runArrayMenu(void)
         {
             listArrayInstances();
 
-            int number = utilsReadInt("Qual array deseja ativar?\n");
+            int number = utilsReadInt("Which array do you want to activate?\n");
 
             switchArrayInstance(number);
             break;
@@ -298,7 +298,7 @@ void runArrayMenu(void)
 
         case 5:
         {
-            data = utilsReadInt("Qual elemento deve ser adicionado?\n");
+            data = utilsReadInt("Which element should be added?\n");
 
             int pushed;
 
@@ -313,7 +313,7 @@ void runArrayMenu(void)
 
             if (pushed)
             {
-                printf("Elemento adicionado!\n");
+                printf("Element added!\n");
             }
 
             break;
@@ -321,8 +321,8 @@ void runArrayMenu(void)
 
         case 6:
         {
-            index = utilsReadInt("Qual posicao?\n");
-            data = utilsReadInt("Qual elemento?\n");
+            index = utilsReadInt("Which position?\n");
+            data = utilsReadInt("Which element?\n");
 
             int inserted;
 
@@ -337,7 +337,7 @@ void runArrayMenu(void)
 
             if (inserted)
             {
-                printf("Elemento inserido!\n");
+                printf("Element inserted!\n");
             }
 
             break;
@@ -345,7 +345,7 @@ void runArrayMenu(void)
 
         case 7:
         {
-            index = utilsReadInt("Qual posicao deve ser removida?\n");
+            index = utilsReadInt("Which position should be removed?\n");
 
             int removed;
 
@@ -360,11 +360,11 @@ void runArrayMenu(void)
 
             if (removed == -1)
             {
-                printf("Posicao invalida!\n");
+                printf("Invalid position!\n");
             }
             else
             {
-                printf("Elemento %d removido!\n", removed);
+                printf("Element %d removed!\n", removed);
             }
 
             break;
@@ -372,7 +372,7 @@ void runArrayMenu(void)
 
         case 8:
         {
-            index = utilsReadInt("Qual posicao?\n");
+            index = utilsReadInt("Which position?\n");
 
             int value;
 
@@ -387,19 +387,19 @@ void runArrayMenu(void)
 
             if (value == -1)
             {
-                printf("Posicao invalida!\n");
+                printf("Invalid position!\n");
             }
             else
             {
-                printf("O elemento da posicao %d eh: %d\n", index, value);
+                printf("The element at position %d is: %d\n", index, value);
             }
 
             break;
         }
 
         case 9:
-            index = utilsReadInt("Qual posicao?\n");
-            data = utilsReadInt("Qual sera o novo valor?\n");
+            index = utilsReadInt("Which position?\n");
+            data = utilsReadInt("New value?\n");
 
             if (arrays[active].type == ARRAY_DYNAMIC)
             {
@@ -410,13 +410,13 @@ void runArrayMenu(void)
                 staticArraySet(&arrays[active].data.staticArr, index, data);
             }
 
-            printf("Elemento alterado!\n");
+            printf("Element updated!\n");
 
             break;
 
         case 10:
         {
-            data = utilsReadInt("Qual elemento deve ser procurado?\n");
+            data = utilsReadInt("Which element should be searched?\n");
 
             int pos;
 
@@ -431,11 +431,11 @@ void runArrayMenu(void)
 
             if (pos == -1)
             {
-                printf("Elemento nao encontrado!\n");
+                printf("Element not found!\n");
             }
             else
             {
-                printf("Elemento %d encontrado na posicao %d\n", data, pos);
+                printf("Element %d found at position %d\n", data, pos);
             }
 
             break;
@@ -443,7 +443,7 @@ void runArrayMenu(void)
 
         case 11:
         {
-            data = utilsReadInt("Qual elemento deve ser contado?\n");
+            data = utilsReadInt("Which element should be counted?\n");
 
             int count;
 
@@ -456,7 +456,7 @@ void runArrayMenu(void)
                 count = staticArrayCountOccurrences(&arrays[active].data.staticArr, data);
             }
 
-            printf("O elemento %d aparece %d vez(es) no array\n", data, count);
+            printf("Element %d appears %d time(s) in the array\n", data, count);
 
             break;
         }
@@ -478,7 +478,7 @@ void runArrayMenu(void)
                 staticArrayCopy(&arrays[active].data.staticArr, &arrays[sourceIndex].data.staticArr);
             }
 
-            printf("Array %d copiado para o novo array %d!\n", sourceId, arrays[active].id);
+            printf("Array %d copied to new array %d!\n", sourceId, arrays[active].id);
 
             break;
         }
@@ -487,12 +487,12 @@ void runArrayMenu(void)
         {
             listArrayInstances();
 
-            int firstNumber = utilsReadInt("Primeiro array:\n");
-            int secondNumber = utilsReadInt("Segundo array:\n");
+            int firstNumber = utilsReadInt("First array:\n");
+            int secondNumber = utilsReadInt("Second array:\n");
 
             if (firstNumber < 1 || firstNumber > totalArrays || secondNumber < 1 || secondNumber > totalArrays)
             {
-                printf("Array invalido!\n");
+                printf("Invalid array!\n");
                 break;
             }
 
@@ -501,7 +501,7 @@ void runArrayMenu(void)
 
             if (first->type != second->type)
             {
-                printf("So da para comparar arrays do mesmo tipo!\n");
+                printf("Only arrays of the same type can be compared!\n");
                 break;
             }
 
@@ -518,18 +518,18 @@ void runArrayMenu(void)
 
             if (equal)
             {
-                printf("Arrays iguais!\n");
+                printf("Arrays are equal!\n");
             }
             else
             {
-                printf("Arrays diferentes!\n");
+                printf("Arrays are different!\n");
             }
 
             break;
         }
 
         case 14:
-            data = utilsReadInt("Qual elemento deve ser removido?\n");
+            data = utilsReadInt("Which element should be removed?\n");
 
             if (arrays[active].type == ARRAY_DYNAMIC)
             {
@@ -540,7 +540,7 @@ void runArrayMenu(void)
                 staticArrayRemoveOccurrences(&arrays[active].data.staticArr, data);
             }
 
-            printf("Ocorrencias removidas!\n");
+            printf("Occurrences removed!\n");
 
             break;
 
@@ -554,7 +554,7 @@ void runArrayMenu(void)
                 staticArrayRemoveDuplicates(&arrays[active].data.staticArr);
             }
 
-            printf("Duplicatas removidas!\n");
+            printf("Duplicates removed!\n");
 
             break;
 
@@ -568,7 +568,7 @@ void runArrayMenu(void)
                 staticArrayReverse(&arrays[active].data.staticArr);
             }
 
-            printf("Array invertido!\n");
+            printf("Array reversed!\n");
 
             break;
 
@@ -585,7 +585,7 @@ void runArrayMenu(void)
                 total = staticArraySize(&arrays[active].data.staticArr);
             }
 
-            printf("Tamanho do array: %d\n", total);
+            printf("Array size: %d\n", total);
 
             break;
         }
@@ -605,11 +605,11 @@ void runArrayMenu(void)
 
             if (empty)
             {
-                printf("Array vazio!\n");
+                printf("Array is empty!\n");
             }
             else
             {
-                printf("Array nao esta vazio!\n");
+                printf("Array is not empty!\n");
             }
 
             break;
@@ -622,21 +622,21 @@ void runArrayMenu(void)
         case 20:
             if (arrays[active].type != ARRAY_STATIC)
             {
-                printf("Esse comando so faz sentido para arrays Estaticos!\n");
+                printf("This command only makes sense for static arrays!\n");
             }
             else if (staticArrayIsFull(&arrays[active].data.staticArr))
             {
-                printf("Array cheio!\n");
+                printf("Array is full!\n");
             }
             else
             {
-                printf("Array nao esta cheio!\n");
+                printf("Array is not full!\n");
             }
 
             break;
 
         default:
-            printf("Insira um comando valido!\n");
+            printf("Enter a valid command!\n");
             break;
         }
     }

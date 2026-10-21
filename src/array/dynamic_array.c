@@ -7,6 +7,14 @@ void dynamicArrayCreate(DynamicArray *array)
 {
     array->data = malloc(INITIAL_CAPACITY * sizeof(int));
     array->size = 0;
+
+    if (array->data == NULL)
+    {
+        printf("Memory allocation failed!\n");
+        array->capacity = 0;
+        return;
+    }
+
     array->capacity = INITIAL_CAPACITY;
 }
 
@@ -30,13 +38,13 @@ int dynamicArraySize(DynamicArray *array)
 
 static int dynamicArrayResize(DynamicArray *array)
 {
-    int newCapacity = array->capacity * 2;
+    int newCapacity = array->capacity == 0 ? INITIAL_CAPACITY : array->capacity * 2;
 
     int *temp = realloc(array->data, newCapacity * sizeof(int));
 
     if (temp == NULL)
     {
-        printf("Falha ao alocar memoria!\n");
+        printf("Memory allocation failed!\n");
         return 0;
     }
 
@@ -66,7 +74,7 @@ int dynamicArrayInsert(DynamicArray *array, int index, int data)
 {
     if (index < 0 || index > array->size)
     {
-        printf("Posicao invalida!\n");
+        printf("Invalid position!\n");
         return 0;
     }
 
@@ -175,6 +183,11 @@ void dynamicArrayPrint(DynamicArray *array)
 
 void dynamicArrayCopy(DynamicArray *destination, DynamicArray *source)
 {
+    if (destination == source)
+    {
+        return;
+    }
+
     dynamicArrayClear(destination);
     dynamicArrayCreate(destination);
 

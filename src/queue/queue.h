@@ -2,7 +2,7 @@
 #define QUEUE_H
 
 /* Ponto de entrada do submenu de filas, chamado pelo menu.c */
-void runQueueMenu(void);
+void runQueueMenu();
 
 typedef struct QueueNode
 {

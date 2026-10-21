@@ -119,11 +119,11 @@ void doubleHashTablePrint(DoubleHashTable *dht)
         }
         else if (dht->table[i].status == SLOT_DELETED)
         {
-            printf("removido\n");
+            printf("deleted\n");
         }
         else
         {
-            printf("vazio\n");
+            printf("empty\n");
         }
     }
 }
@@ -145,7 +145,7 @@ int doubleHashTableInsertNoResize(DoubleHashTable *dht, int key)
 
         if (dht->table[probe].status == SLOT_OCCUPIED && dht->table[probe].key == key)
         {
-            printf("Valor Repetido\n");
+            printf("Duplicate value\n");
             return 0;
         }
 
@@ -192,7 +192,7 @@ void doubleHashTableInsert(DoubleHashTable *dht, int key)
     {
         if (doubleHashTableRehash(dht, dht->size * 2))
         {
-            printf("ReHash automatico realizado!\n");
+            printf("Automatic rehash done!\n");
         }
     }
 }
@@ -391,34 +391,34 @@ void doubleHashTableCompare(DoubleHashTable *dht1, DoubleHashTable *dht2)
         }
     }
 
-    printf("\n====== Comparacao ======\n");
+    printf("\n====== Comparison ======\n");
 
-    printf("\nTabela 1:");
-    printf("\nElementos: %d", dht1->count);
-    printf("\nTamanho: %d", dht1->size);
-    printf("\nLoad Factor: %.2f", loadFactor1);
-    printf("\nColisoes: %d", collisions1);
-    printf("\nMaior sequencia de probing: %d", maxProbe1);
+    printf("\nTable 1:");
+    printf("\nElements: %d", dht1->count);
+    printf("\nSize: %d", dht1->size);
+    printf("\nLoad factor: %.2f", loadFactor1);
+    printf("\nCollisions: %d", collisions1);
+    printf("\nLongest probe sequence: %d", maxProbe1);
 
-    printf("\n\nTabela 2:");
-    printf("\nElementos: %d", dht2->count);
-    printf("\nTamanho: %d", dht2->size);
-    printf("\nLoad Factor: %.2f", loadFactor2);
-    printf("\nColisoes: %d", collisions2);
-    printf("\nMaior sequencia de probing: %d", maxProbe2);
+    printf("\n\nTable 2:");
+    printf("\nElements: %d", dht2->count);
+    printf("\nSize: %d", dht2->size);
+    printf("\nLoad factor: %.2f", loadFactor2);
+    printf("\nCollisions: %d", collisions2);
+    printf("\nLongest probe sequence: %d", maxProbe2);
 
-    printf("\n\nMelhor tabela: ");
+    printf("\n\nBest table: ");
 
     if (collisions1 < collisions2)
     {
-        printf("Tabela 1 (menos colisoes)\n");
+        printf("Table 1 (fewer collisions)\n");
     }
     else if (collisions2 < collisions1)
     {
-        printf("Tabela 2 (menos colisoes)\n");
+        printf("Table 2 (fewer collisions)\n");
     }
     else
     {
-        printf("Empate\n");
+        printf("Tie\n");
     }
 }

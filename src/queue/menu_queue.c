@@ -13,7 +13,7 @@ static int totalQueues = 0;
 static int queuesCapacity = 0;
 static int active = -1; /* indice em 'queues', -1 = nenhuma fila ativa */
 
-static void createQueueInstance(void)
+static void createQueueInstance()
 {
     if (totalQueues == queuesCapacity)
     {
@@ -30,7 +30,7 @@ static void createQueueInstance(void)
 
         if (queues == NULL)
         {
-            printf("Erro ao alocar memoria\n");
+            printf("Memory allocation failed\n");
             exit(1);
         }
     }
@@ -41,28 +41,28 @@ static void createQueueInstance(void)
     active = totalQueues;
     totalQueues++;
 
-    printf("Fila %d criada e definida como ativa!\n", queues[active].id);
+    printf("Queue %d created and set as active!\n", queues[active].id);
 }
 
-static void listQueueInstances(void)
+static void listQueueInstances()
 {
     if (totalQueues == 0)
     {
-        printf("Nenhuma fila criada ainda. Use o comando [1] para criar uma.\n");
+        printf("No queues created yet. Use command [1] to create one.\n");
         return;
     }
 
-    printf("=== Filas criadas ===\n");
+    printf("=== Created queues ===\n");
 
     for (int i = 0; i < totalQueues; i++)
     {
         if (i == active)
         {
-            printf("Fila %d (ativa)\n", queues[i].id);
+            printf("Queue %d (active)\n", queues[i].id);
         }
         else
         {
-            printf("Fila %d\n", queues[i].id);
+            printf("Queue %d\n", queues[i].id);
         }
     }
 }
@@ -71,12 +71,12 @@ static void switchQueueInstance(int number)
 {
     if (number < 1 || number > totalQueues)
     {
-        printf("Fila invalida!\n");
+        printf("Invalid queue!\n");
         return;
     }
 
     active = number - 1;
-    printf("Fila ativa agora: %d\n", queues[active].id);
+    printf("Active queue is now: %d\n", queues[active].id);
 }
 
 /* Pede o numero de outra fila (diferente da ativa) e devolve o indice dela,
@@ -89,65 +89,65 @@ static int chooseOtherQueue(const char *prompt)
 
     if (number < 1 || number > totalQueues)
     {
-        printf("Fila invalida!\n");
+        printf("Invalid queue!\n");
         return -1;
     }
 
     if (number - 1 == active)
     {
-        printf("Escolha uma fila diferente da ativa!\n");
+        printf("Choose a queue different from the active one!\n");
         return -1;
     }
 
     return number - 1;
 }
 
-void runQueueMenu(void)
+void runQueueMenu()
 {
     int command, data, k;
     int running = 1;
 
     while (running)
     {
-        printf("\n=== MENU FILAS");
+        printf("\n=== QUEUES MENU");
 
         if (active != -1)
         {
-            printf(" | Fila ativa: %d", queues[active].id);
+            printf(" | Active queue: %d", queues[active].id);
         }
 
         printf(" ===\n");
 
-        printf("[0] Voltar ao menu principal\n");
-        printf("[1] Cria uma nova fila\n");
-        printf("[2] Lista as filas criadas\n");
-        printf("[3] Troca a fila ativa\n");
-        printf("[4] Mostra a fila atual\n");
-        printf("[5] Insere no fim da fila\n");
-        printf("[6] Remove do inicio da fila\n");
-        printf("[7] Mostra o inicio da fila\n");
-        printf("[8] Busca um valor na fila\n");
-        printf("[9] Conta ocorrencias de um valor\n");
-        printf("[10] Copia a fila ativa (cria uma nova)\n");
-        printf("[11] Compara duas filas\n");
-        printf("[12] Mostra o elemento do meio\n");
-        printf("[13] Remove ocorrencias\n");
-        printf("[14] Remove duplicatas\n");
-        printf("[15] Insere ordenado\n");
-        printf("[16] Ordena a fila (insertion sort)\n");
-        printf("[17] Junta filas (copia; a outra continua intacta)\n");
-        printf("[18] Junta filas (move; a outra fica vazia)\n");
-        printf("[19] Intercala filas\n");
-        printf("[20] Rotaciona a fila\n");
-        printf("[21] Rotaciona a fila K vezes\n");
-        printf("[22] Ordena com Merge Sort\n");
-        printf("[23] Verifica a ordenacao\n");
+        printf("[0] Back to main menu\n");
+        printf("[1] Create a new queue\n");
+        printf("[2] List the created queues\n");
+        printf("[3] Switch the active queue\n");
+        printf("[4] Show the current queue\n");
+        printf("[5] Insert at the back of the queue\n");
+        printf("[6] Remove from the front of the queue\n");
+        printf("[7] Show the front of the queue\n");
+        printf("[8] Search for a value in the queue\n");
+        printf("[9] Count occurrences of a value\n");
+        printf("[10] Copy the active queue (creates a new one)\n");
+        printf("[11] Compare two queues\n");
+        printf("[12] Show the middle element\n");
+        printf("[13] Remove occurrences\n");
+        printf("[14] Remove duplicates\n");
+        printf("[15] Insert in order\n");
+        printf("[16] Sort the queue (insertion sort)\n");
+        printf("[17] Merge queues (copy; the other stays unchanged)\n");
+        printf("[18] Merge queues (move; the other becomes empty)\n");
+        printf("[19] Interleave queues\n");
+        printf("[20] Rotate the queue\n");
+        printf("[21] Rotate the queue K times\n");
+        printf("[22] Sort with Merge Sort\n");
+        printf("[23] Check the ordering\n");
 
-        command = utilsReadInt("Escolha: ");
+        command = utilsReadInt("Choice: ");
 
         if (active == -1 && command != 0 && command != 1 && command != 2)
         {
-            printf("Voce precisa criar uma fila primeiro! (comando 1)\n");
+            printf("You need to create a queue first! (command 1)\n");
             continue;
         }
 
@@ -169,7 +169,7 @@ void runQueueMenu(void)
         {
             listQueueInstances();
 
-            int number = utilsReadInt("Qual fila deseja ativar?\n");
+            int number = utilsReadInt("Which queue do you want to activate?\n");
 
             switchQueueInstance(number);
             break;
@@ -182,11 +182,11 @@ void runQueueMenu(void)
             break;
 
         case 5:
-            data = utilsReadInt("Qual elemento deve ser adicionado?\n");
+            data = utilsReadInt("Which element should be added?\n");
 
             queueEnqueue(&queues[active].data, data);
 
-            printf("Elemento adicionado!\n");
+            printf("Element added!\n");
 
             break;
 
@@ -196,7 +196,7 @@ void runQueueMenu(void)
 
             if (removed != -1)
             {
-                printf("Elemento %d removido!\n", removed);
+                printf("Element %d removed!\n", removed);
             }
 
             break;
@@ -205,28 +205,28 @@ void runQueueMenu(void)
         case 7:
             if (queueIsEmpty(&queues[active].data))
             {
-                printf("Fila Vazia!\n");
+                printf("Queue is empty!\n");
             }
             else
             {
-                printf("O inicio eh: %d\n", queuePeek(&queues[active].data));
+                printf("The front is: %d\n", queuePeek(&queues[active].data));
             }
 
             break;
 
         case 8:
         {
-            data = utilsReadInt("Qual elemento deve ser procurado?\n");
+            data = utilsReadInt("Which element should be searched?\n");
 
             int pos = queueContains(&queues[active].data, data);
 
             if (pos == -1)
             {
-                printf("Elemento nao encontrado!\n");
+                printf("Element not found!\n");
             }
             else
             {
-                printf("Elemento %d encontrado na posicao %d\n", data, pos);
+                printf("Element %d found at position %d\n", data, pos);
             }
 
             break;
@@ -235,15 +235,15 @@ void runQueueMenu(void)
         case 9:
             if (queueIsEmpty(&queues[active].data))
             {
-                printf("Fila Vazia!\n");
+                printf("Queue is empty!\n");
             }
             else
             {
-                data = utilsReadInt("Qual elemento deve ser contado?\n");
+                data = utilsReadInt("Which element should be counted?\n");
 
                 int count = queueCountOccurrences(&queues[active].data, data);
 
-                printf("O elemento %d aparece %d vez(es) na fila\n", data, count);
+                printf("Element %d appears %d time(s) in the queue\n", data, count);
             }
 
             break;
@@ -256,7 +256,7 @@ void runQueueMenu(void)
             createQueueInstance();
             queueCopy(&queues[active].data, &queues[sourceIndex].data);
 
-            printf("Fila %d copiada para a nova fila %d!\n", sourceId, queues[active].id);
+            printf("Queue %d copied to new queue %d!\n", sourceId, queues[active].id);
 
             break;
         }
@@ -265,22 +265,22 @@ void runQueueMenu(void)
         {
             listQueueInstances();
 
-            int firstNumber = utilsReadInt("Primeira fila:\n");
-            int secondNumber = utilsReadInt("Segunda fila:\n");
+            int firstNumber = utilsReadInt("First queue:\n");
+            int secondNumber = utilsReadInt("Second queue:\n");
 
             if (firstNumber < 1 || firstNumber > totalQueues || secondNumber < 1 || secondNumber > totalQueues)
             {
-                printf("Fila invalida!\n");
+                printf("Invalid queue!\n");
                 break;
             }
 
             if (queueCompare(&queues[firstNumber - 1].data, &queues[secondNumber - 1].data))
             {
-                printf("Filas iguais!\n");
+                printf("Queues are equal!\n");
             }
             else
             {
-                printf("Filas diferentes!\n");
+                printf("Queues are different!\n");
             }
 
             break;
@@ -292,11 +292,11 @@ void runQueueMenu(void)
 
             if (middle == -1)
             {
-                printf("Fila Vazia!\n");
+                printf("Queue is empty!\n");
             }
             else
             {
-                printf("O elemento do meio eh: %d\n", middle);
+                printf("The middle element is: %d\n", middle);
             }
 
             break;
@@ -304,17 +304,17 @@ void runQueueMenu(void)
 
         case 13:
         {
-            data = utilsReadInt("Qual ocorrencia?\n");
+            data = utilsReadInt("Which value?\n");
 
             int removeds = queueRemoveOccurrences(&queues[active].data, data);
 
             if (removeds == 0)
             {
-                printf("Nenhuma ocorrencia encontrada\n");
+                printf("No occurrences found\n");
             }
             else
             {
-                printf("%d ocorrencia(s) removidas\n", removeds);
+                printf("%d occurrence(s) removed\n", removeds);
             }
 
             break;
@@ -323,29 +323,29 @@ void runQueueMenu(void)
         case 14:
             queueRemoveDuplicates(&queues[active].data);
 
-            printf("Duplicatas removidas!\n");
+            printf("Duplicates removed!\n");
 
             break;
 
         case 15:
-            data = utilsReadInt("Qual elemento?\n");
+            data = utilsReadInt("Which element?\n");
 
             queueInsertSorted(&queues[active].data, data);
 
-            printf("Elemento %d inserido ordenado!\n", data);
+            printf("Element %d inserted in order!\n", data);
 
             break;
 
         case 16:
             queueSort(&queues[active].data);
 
-            printf("Fila Ordenada!\n");
+            printf("Queue sorted!\n");
 
             break;
 
         case 17:
         {
-            int otherIndex = chooseOtherQueue("Copiar os elementos de qual fila para a ativa?\n");
+            int otherIndex = chooseOtherQueue("Copy elements from which queue into the active one?\n");
 
             if (otherIndex == -1)
             {
@@ -354,14 +354,14 @@ void runQueueMenu(void)
 
             queueMergeCopy(&queues[active].data, &queues[otherIndex].data);
 
-            printf("Filas unidas! (a fila de origem continua intacta)\n");
+            printf("Queues merged! (the source queue is unchanged)\n");
 
             break;
         }
 
         case 18:
         {
-            int otherIndex = chooseOtherQueue("Mover os elementos de qual fila para a ativa?\n");
+            int otherIndex = chooseOtherQueue("Move elements from which queue into the active one?\n");
 
             if (otherIndex == -1)
             {
@@ -370,14 +370,14 @@ void runQueueMenu(void)
 
             queueMergeMove(&queues[active].data, &queues[otherIndex].data);
 
-            printf("Filas unidas! (a fila de origem ficou vazia)\n");
+            printf("Queues merged! (the source queue is now empty)\n");
 
             break;
         }
 
         case 19:
         {
-            int otherIndex = chooseOtherQueue("Intercalar a ativa com qual fila?\n");
+            int otherIndex = chooseOtherQueue("Interleave the active queue with which queue?\n");
 
             if (otherIndex == -1)
             {
@@ -386,7 +386,7 @@ void runQueueMenu(void)
 
             queueInterleave(&queues[active].data, &queues[otherIndex].data);
 
-            printf("Filas intercaladas!\n");
+            printf("Queues interleaved!\n");
 
             break;
         }
@@ -394,23 +394,23 @@ void runQueueMenu(void)
         case 20:
             queueRotate(&queues[active].data);
 
-            printf("Fila Rotacionada!\n");
+            printf("Queue rotated!\n");
 
             break;
 
         case 21:
-            k = utilsReadInt("Quantas vezes?\n");
+            k = utilsReadInt("How many times?\n");
 
             queueRotateK(&queues[active].data, k);
 
-            printf("Fila Rotacionada %d vezes!\n", k);
+            printf("Queue rotated %d times!\n", k);
 
             break;
 
         case 22:
             queueMergeSort(&queues[active].data);
 
-            printf("Fila Ordenada!\n");
+            printf("Queue sorted!\n");
 
             break;
 
@@ -420,26 +420,26 @@ void runQueueMenu(void)
 
             if (sorted == 1)
             {
-                printf("Fila em Ordem Crescente\n");
+                printf("Queue is in ascending order\n");
             }
             else if (sorted == 2)
             {
-                printf("Fila em Ordem Decrescente\n");
+                printf("Queue is in descending order\n");
             }
             else if (sorted == -1)
             {
-                printf("Fila Vazia\n");
+                printf("Queue is empty\n");
             }
             else
             {
-                printf("Fila Nao Ordenada\n");
+                printf("Queue is not sorted\n");
             }
 
             break;
         }
 
         default:
-            printf("Insira um comando valido!\n");
+            printf("Enter a valid command!\n");
             break;
         }
     }

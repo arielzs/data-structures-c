@@ -24,10 +24,10 @@ static const char *hashTypeName(HashType type)
 {
     if (type == HASH_CHAINED)
     {
-        return "Encadeamento";
+        return "Chaining";
     }
 
-    return "Hashing Duplo";
+    return "Double Hashing";
 }
 
 static float activeLoadFactor()
@@ -46,11 +46,11 @@ static float activeLoadFactor()
 
 static void createHashTableInstance(HashType type)
 {
-    int size = utilsReadInt("Qual o tamanho da tabela?\n");
+    int size = utilsReadInt("Table size?\n");
 
     if (size <= 0)
     {
-        printf("Tamanho invalido!\n");
+        printf("Invalid size!\n");
         return;
     }
 
@@ -67,7 +67,7 @@ static void createHashTableInstance(HashType type)
 
     if (table == NULL)
     {
-        printf("Erro ao criar a hash table\n");
+        printf("Error creating the hash table\n");
         return;
     }
 
@@ -86,7 +86,7 @@ static void createHashTableInstance(HashType type)
 
         if (tables == NULL)
         {
-            printf("Erro ao alocar memoria\n");
+            printf("Memory allocation failed\n");
             exit(1);
         }
     }
@@ -98,13 +98,13 @@ static void createHashTableInstance(HashType type)
     active = totalTables;
     totalTables++;
 
-    printf("Hash Table %d (%s) criada e definida como ativa!\n", tables[active].id, hashTypeName(type));
+    printf("Hash table %d (%s) created and set as active!\n", tables[active].id, hashTypeName(type));
 
     if (type == HASH_DOUBLE)
     {
         DoubleHashTable *dht = (DoubleHashTable *)tables[active].table;
 
-        printf("(tamanho ajustado para o proximo primo: %d)\n", dht->size);
+        printf("(size adjusted to the next prime: %d)\n", dht->size);
     }
 }
 
@@ -112,21 +112,21 @@ static void listHashTableInstances()
 {
     if (totalTables == 0)
     {
-        printf("Nenhuma hash table criada ainda. Use o comando [1] para criar uma.\n");
+        printf("No hash tables created yet. Use command [1] to create one.\n");
         return;
     }
 
-    printf("=== Hash Tables criadas ===\n");
+    printf("=== Created hash tables ===\n");
 
     for (int i = 0; i < totalTables; i++)
     {
         if (i == active)
         {
-            printf("Hash Table %d - %s (ativa)\n", tables[i].id, hashTypeName(tables[i].type));
+            printf("Hash table %d - %s (active)\n", tables[i].id, hashTypeName(tables[i].type));
         }
         else
         {
-            printf("Hash Table %d - %s\n", tables[i].id, hashTypeName(tables[i].type));
+            printf("Hash table %d - %s\n", tables[i].id, hashTypeName(tables[i].type));
         }
     }
 }
@@ -135,12 +135,12 @@ static void switchHashTableInstance(int number)
 {
     if (number < 1 || number > totalTables)
     {
-        printf("Hash Table invalida!\n");
+        printf("Invalid hash table!\n");
         return;
     }
 
     active = number - 1;
-    printf("Hash Table ativa agora: %d (%s)\n", tables[active].id, hashTypeName(tables[active].type));
+    printf("Active hash table is now: %d (%s)\n", tables[active].id, hashTypeName(tables[active].type));
 }
 
 void runHashTableMenu()
@@ -150,33 +150,33 @@ void runHashTableMenu()
 
     while (running)
     {
-        printf("\n=== MENU HASH TABLES");
+        printf("\n=== HASH TABLES MENU");
 
         if (active != -1)
         {
-            printf(" | Hash Table ativa: %d (%s)", tables[active].id, hashTypeName(tables[active].type));
+            printf(" | Active hash table: %d (%s)", tables[active].id, hashTypeName(tables[active].type));
         }
 
         printf(" ===\n");
 
-        printf("[0] Voltar ao menu principal\n");
-        printf("[1] Cria uma nova hash table\n");
-        printf("[2] Lista as hash tables criadas\n");
-        printf("[3] Troca a hash table ativa\n");
-        printf("[4] Mostra a tabela atual\n");
-        printf("[5] Insere elemento\n");
-        printf("[6] Remove elemento\n");
-        printf("[7] Busca um elemento\n");
-        printf("[8] ReHash manual (reaproveita a tabela)\n");
-        printf("[9] ReHash manual (recria a tabela do zero)\n");
-        printf("[10] Compara duas tabelas (mesmo tipo)\n");
-        printf("[11] Limpa os elementos da tabela ativa\n");
+        printf("[0] Back to main menu\n");
+        printf("[1] Create a new hash table\n");
+        printf("[2] List the created hash tables\n");
+        printf("[3] Switch the active hash table\n");
+        printf("[4] Show the current table\n");
+        printf("[5] Insert element\n");
+        printf("[6] Remove element\n");
+        printf("[7] Search for an element\n");
+        printf("[8] Manual rehash (reuses the table)\n");
+        printf("[9] Manual rehash (rebuilds the table from scratch)\n");
+        printf("[10] Compare two tables (same type)\n");
+        printf("[11] Clear the elements of the active table\n");
 
-        command = utilsReadInt("Escolha: ");
+        command = utilsReadInt("Choice: ");
 
         if (active == -1 && command != 0 && command != 1 && command != 2)
         {
-            printf("Voce precisa criar uma hash table primeiro! (comando 1)\n");
+            printf("You need to create a hash table first! (command 1)\n");
             continue;
         }
 
@@ -188,7 +188,7 @@ void runHashTableMenu()
 
         case 1:
         {
-            int typeChoice = utilsReadInt("Qual tipo de hash table?\n[1] Encadeamento (chaining)\n[2] Enderecamento aberto (hashing duplo)\n");
+            int typeChoice = utilsReadInt("Which type of hash table?\n[1] Chaining\n[2] Open addressing (double hashing)\n");
 
             if (typeChoice == 1)
             {
@@ -200,7 +200,7 @@ void runHashTableMenu()
             }
             else
             {
-                printf("Tipo invalido!\n");
+                printf("Invalid type!\n");
             }
 
             break;
@@ -214,7 +214,7 @@ void runHashTableMenu()
         {
             listHashTableInstances();
 
-            int number = utilsReadInt("Qual hash table deseja ativar?\n");
+            int number = utilsReadInt("Which hash table do you want to activate?\n");
 
             switchHashTableInstance(number);
             break;
@@ -235,7 +235,7 @@ void runHashTableMenu()
             break;
 
         case 5:
-            key = utilsReadInt("Qual key?\n");
+            key = utilsReadInt("Which key?\n");
 
             if (tables[active].type == HASH_CHAINED)
             {
@@ -246,13 +246,13 @@ void runHashTableMenu()
                 doubleHashTableInsert((DoubleHashTable *)tables[active].table, key);
             }
 
-            printf("Key inserida\n");
+            printf("Key inserted\n");
 
             break;
 
         case 6:
         {
-            key = utilsReadInt("Qual key?\n");
+            key = utilsReadInt("Which key?\n");
 
             int result;
 
@@ -267,11 +267,11 @@ void runHashTableMenu()
 
             if (result == 1)
             {
-                printf("Key removida\n");
+                printf("Key removed\n");
             }
             else
             {
-                printf("Key nao encontrada\n");
+                printf("Key not found\n");
             }
 
             break;
@@ -279,7 +279,7 @@ void runHashTableMenu()
 
         case 7:
         {
-            key = utilsReadInt("Qual key?\n");
+            key = utilsReadInt("Which key?\n");
 
             int found;
 
@@ -298,11 +298,11 @@ void runHashTableMenu()
 
             if (found)
             {
-                printf("Key encontrada\n");
+                printf("Key found\n");
             }
             else
             {
-                printf("Key nao encontrada\n");
+                printf("Key not found\n");
             }
 
             break;
@@ -314,9 +314,9 @@ void runHashTableMenu()
 
             if (loadFactor < 0.75)
             {
-                printf("O load factor eh: %.2f\n\n", loadFactor);
+                printf("The load factor is: %.2f\n\n", loadFactor);
 
-                int option = utilsReadInt("A tabela nao esta muito cheia, deseja continuar mesmo assim?\n[1] Sim\n[2] Nao\n");
+                int option = utilsReadInt("The table is not very full, continue anyway?\n[1] Yes\n[2] No\n");
 
                 if (option == 2)
                 {
@@ -324,11 +324,11 @@ void runHashTableMenu()
                 }
             }
 
-            int newSize = utilsReadInt("Qual sera o novo tamanho?\n");
+            int newSize = utilsReadInt("New size?\n");
 
             if (newSize <= 0)
             {
-                printf("Tamanho invalido!\n");
+                printf("Invalid size!\n");
                 break;
             }
 
@@ -345,23 +345,23 @@ void runHashTableMenu()
 
             if (!ok)
             {
-                printf("Erro ao alocar memoria\n");
+                printf("Memory allocation failed\n");
                 break;
             }
 
-            printf("ReHash feito\n");
-            printf("Novo Load Factor: %.2f\n", activeLoadFactor());
+            printf("Rehash done\n");
+            printf("New load factor: %.2f\n", activeLoadFactor());
 
             break;
         }
 
         case 9:
         {
-            int newSize = utilsReadInt("Qual sera o novo tamanho?\n");
+            int newSize = utilsReadInt("New size?\n");
 
             if (newSize <= 0)
             {
-                printf("Tamanho invalido!\n");
+                printf("Invalid size!\n");
                 break;
             }
 
@@ -371,7 +371,7 @@ void runHashTableMenu()
 
                 if (newTable == NULL)
                 {
-                    printf("Erro ao alocar memoria\n");
+                    printf("Memory allocation failed\n");
                     break;
                 }
 
@@ -383,14 +383,14 @@ void runHashTableMenu()
 
                 if (newTable == NULL)
                 {
-                    printf("Erro ao alocar memoria\n");
+                    printf("Memory allocation failed\n");
                     break;
                 }
 
                 tables[active].table = newTable;
             }
 
-            printf("ReHash feito (tabela recriada do zero)\n");
+            printf("Rehash done (table rebuilt from scratch)\n");
 
             break;
         }
@@ -399,12 +399,12 @@ void runHashTableMenu()
         {
             listHashTableInstances();
 
-            int firstNumber = utilsReadInt("Primeira hash table:\n");
-            int secondNumber = utilsReadInt("Segunda hash table:\n");
+            int firstNumber = utilsReadInt("First hash table:\n");
+            int secondNumber = utilsReadInt("Second hash table:\n");
 
             if (firstNumber < 1 || firstNumber > totalTables || secondNumber < 1 || secondNumber > totalTables)
             {
-                printf("Hash Table invalida!\n");
+                printf("Invalid hash table!\n");
                 break;
             }
 
@@ -413,7 +413,7 @@ void runHashTableMenu()
 
             if (first->type != second->type)
             {
-                printf("So da para comparar hash tables do mesmo tipo!\n");
+                printf("Only hash tables of the same type can be compared!\n");
                 break;
             }
 
@@ -441,12 +441,12 @@ void runHashTableMenu()
                 doubleHashTableClearElements((DoubleHashTable *)tables[active].table);
             }
 
-            printf("Elementos removidos!\n");
+            printf("Elements removed!\n");
 
             break;
 
         default:
-            printf("Insira um comando valido!\n");
+            printf("Enter a valid command!\n");
             break;
         }
     }

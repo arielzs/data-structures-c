@@ -2,7 +2,7 @@
 #define HEAP_H
 
 /* Ponto de entrada do submenu de heaps, chamado pelo menu.c */
-void runHeapMenu(void);
+void runHeapMenu();
 
 typedef enum
 {

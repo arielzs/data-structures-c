@@ -77,6 +77,13 @@ int main()
     sortArray(buffer, size, SORT_HEAP);
     assert(isSortedAscending(buffer, size) == 1);
 
+    /* ===== Counting Sort com negativos e repetidos ===== */
+    int withNegatives[] = {3, -2, 7, -2, 0, -9, 7};
+    sortArray(withNegatives, 7, SORT_COUNTING);
+    assert(isSortedAscending(withNegatives, 7) == 1);
+    assert(withNegatives[0] == -9);
+    assert(withNegatives[6] == 7);
+
     /* ===== Casos-limite: array vazio e com 1 elemento nao devem quebrar ===== */
     int emptyArray[1];
     sortArray(emptyArray, 0, SORT_BUBBLE);

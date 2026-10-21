@@ -35,13 +35,13 @@ void queuePrint(Queue *q)
 {
     if (queueIsEmpty(q))
     {
-        printf("INICIO -> NULL <- FIM");
+        printf("FRONT -> NULL <- BACK");
         return;
     }
 
     QueueNode *temp = q->start;
 
-    printf("\nINICIO -> ");
+    printf("\nFRONT -> ");
 
     while (temp != NULL)
     {
@@ -50,7 +50,7 @@ void queuePrint(Queue *q)
     }
 
     printf("NULL\n");
-    printf("\nTamanho da fila: %d\n", q->size);
+    printf("\nQueue size: %d\n", q->size);
 }
 
 void queueEnqueue(Queue *q, int data)
@@ -59,7 +59,7 @@ void queueEnqueue(Queue *q, int data)
 
     if (newNode == NULL)
     {
-        printf("Erro ao alocar memoria!\n");
+        printf("Memory allocation failed!\n");
         return;
     }
 
@@ -84,7 +84,7 @@ int queueDequeue(Queue *q)
 {
     if (queueIsEmpty(q))
     {
-        printf("Fila Vazia!");
+        printf("Queue is empty!");
         return -1;
     }
 
@@ -205,7 +205,7 @@ void queueRemoveDuplicates(Queue *q)
 {
     if (queueIsEmpty(q))
     {
-        printf("Fila Vazia!\n");
+        printf("Queue is empty!\n");
         return;
     }
 
@@ -348,7 +348,7 @@ void queueInsertSorted(Queue *q, int data)
 
     if (newNode == NULL)
     {
-        printf("Erro ao alocar memoria!\n");
+        printf("Memory allocation failed!\n");
         return;
     }
 

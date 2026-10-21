@@ -63,16 +63,16 @@ void minHeapPrint(Heap *h)
 
     printf("]\n");
 
-    printf("\nCapacidade: %d\n", h->capacity);
-    printf("Tamanho: %d\n", h->size);
+    printf("\nCapacity: %d\n", h->capacity);
+    printf("Size: %d\n", h->size);
 
     if (h->isHeap)
     {
-        printf("Estado: Min-Heap\n");
+        printf("State: Min-Heap\n");
     }
     else
     {
-        printf("Estado: Vetor Ordenado / Nao eh uma Heap\n");
+        printf("State: Sorted array / Not a heap\n");
     }
 }
 
@@ -163,8 +163,8 @@ void minHeapInsert(Heap *h, int data)
 
     if (!h->isHeap)
     {
-        printf("Erro: o vetor nao e uma Heap\n");
-        printf("Faca BuildHeap antes de inserir\n");
+        printf("Error: the array is not a heap\n");
+        printf("Run BuildHeap before inserting\n");
         return;
     }
 

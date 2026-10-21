@@ -8,7 +8,7 @@
 #include "stack.h"      /* declara runStackMenu() */
 #include "tree.h"       /* declara runTreeMenu() */
 
-static void printMainMenu(void)
+static void printMainMenu()
 {
     printf("\n=== DATA STRUCTURES C ===\n");
     printf("[1] Array\n");
@@ -19,10 +19,10 @@ static void printMainMenu(void)
     printf("[6] Queue\n");
     printf("[7] Stack\n");
     printf("[8] Tree (BST / AVL)\n");
-    printf("[0] Sair\n");
+    printf("[0] Exit\n");
 }
 
-void runMainMenu(void)
+void runMainMenu()
 {
     int choice;
     int running = 1;
@@ -30,7 +30,7 @@ void runMainMenu(void)
     while (running)
     {
         printMainMenu();
-        choice = utilsReadInt("Escolha: ");
+        choice = utilsReadInt("Choice: ");
 
         switch (choice)
         {
@@ -39,12 +39,12 @@ void runMainMenu(void)
             break;
 
         case 2:
-            printf("Deque ainda esta em desenvolvimento!\n");
+            printf("Deque is still under development!\n");
             /* runDequeMenu(); */
             break;
 
         case 3:
-            printf("Graph ainda esta em desenvolvimento!\n");
+            printf("Graph is still under development!\n");
             /* runGraphMenu(); */
             break;
 
@@ -69,12 +69,12 @@ void runMainMenu(void)
             break;
 
         case 0:
-            printf("Encerrando...\n");
+            printf("Exiting...\n");
             running = 0;
             break;
 
         default:
-            printf("Comando invalido!\n");
+            printf("Invalid command!\n");
         }
     }
 }

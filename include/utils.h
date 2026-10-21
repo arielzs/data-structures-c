@@ -2,8 +2,8 @@
 #define UTILS_H
 
 int utilsReadInt(const char *prompt);
-void utilsClearInputBuffer(void);
-void utilsPause(void);
+void utilsClearInputBuffer();
+void utilsPause();
 void utilsReadLine(const char *prompt, char *buffer, int bufferSize);
 
 #endif

@@ -8,6 +8,11 @@ static int chainedHashFunction(int size, int key)
 
 ChainedHashTable *chainedHashTableCreate(int size)
 {
+    if (size <= 0)
+    {
+        return NULL;
+    }
+
     ChainedHashTable *ht = malloc(sizeof(ChainedHashTable));
 
     if (ht == NULL)
@@ -113,7 +118,7 @@ void chainedHashTableInsert(ChainedHashTable *ht, int key)
     {
         if (chainedHashTableRehash(ht, ht->size * 2))
         {
-            printf("ReHash automatico realizado!\n");
+            printf("Automatic rehash done!\n");
         }
     }
 }
@@ -302,34 +307,34 @@ void chainedHashTableCompare(ChainedHashTable *ht1, ChainedHashTable *ht2)
         }
     }
 
-    printf("\n====== Comparacao ======\n");
+    printf("\n====== Comparison ======\n");
 
-    printf("\nTabela 1:");
-    printf("\nElementos: %d", ht1->count);
-    printf("\nTamanho: %d", ht1->size);
-    printf("\nLoad Factor: %.2f", loadFactor1);
-    printf("\nColisoes: %d", collisions1);
-    printf("\nMaior lista: %d", maxChain1);
+    printf("\nTable 1:");
+    printf("\nElements: %d", ht1->count);
+    printf("\nSize: %d", ht1->size);
+    printf("\nLoad factor: %.2f", loadFactor1);
+    printf("\nCollisions: %d", collisions1);
+    printf("\nLongest chain: %d", maxChain1);
 
-    printf("\n\nTabela 2:");
-    printf("\nElementos: %d", ht2->count);
-    printf("\nTamanho: %d", ht2->size);
-    printf("\nLoad Factor: %.2f", loadFactor2);
-    printf("\nColisoes: %d", collisions2);
-    printf("\nMaior lista: %d", maxChain2);
+    printf("\n\nTable 2:");
+    printf("\nElements: %d", ht2->count);
+    printf("\nSize: %d", ht2->size);
+    printf("\nLoad factor: %.2f", loadFactor2);
+    printf("\nCollisions: %d", collisions2);
+    printf("\nLongest chain: %d", maxChain2);
 
-    printf("\n\nMelhor tabela: ");
+    printf("\n\nBest table: ");
 
     if (collisions1 < collisions2)
     {
-        printf("Tabela 1 (menos colisoes)\n");
+        printf("Table 1 (fewer collisions)\n");
     }
     else if (collisions2 < collisions1)
     {
-        printf("Tabela 2 (menos colisoes)\n");
+        printf("Table 2 (fewer collisions)\n");
     }
     else
     {
-        printf("Empate\n");
+        printf("Tie\n");
     }
 }

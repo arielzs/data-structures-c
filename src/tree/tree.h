@@ -2,7 +2,7 @@
 #define TREE_H
 
 /* Ponto de entrada do submenu de arvores, chamado pelo menu.c */
-void runTreeMenu(void);
+void runTreeMenu();
 
 /* ========================= BST ========================= */
 

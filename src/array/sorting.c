@@ -70,7 +70,7 @@ void insertionSort(int *array, int size)
     }
 }
 
-/* Assume valores nao negativos */
+/* Usa o menor valor como deslocamento, entao funciona com negativos */
 void countingSort(int *array, int size)
 {
     if (size <= 0)
@@ -78,33 +78,49 @@ void countingSort(int *array, int size)
         return;
     }
 
+    int min = array[0];
     int max = array[0];
 
     for (int i = 1; i < size; i++)
     {
+        if (array[i] < min)
+        {
+            min = array[i];
+        }
+
         if (array[i] > max)
         {
             max = array[i];
         }
     }
 
-    int *count = calloc(max + 1, sizeof(int));
+    long range = (long)max - (long)min + 1;
+
+    int *count = calloc(range, sizeof(int));
     int *output = malloc(size * sizeof(int));
+
+    if (count == NULL || output == NULL)
+    {
+        printf("Memory allocation failed!\n");
+        free(count);
+        free(output);
+        return;
+    }
 
     for (int i = 0; i < size; i++)
     {
-        count[array[i]]++;
+        count[array[i] - min]++;
     }
 
-    for (int i = 1; i <= max; i++)
+    for (int i = 1; i < range; i++)
     {
         count[i] += count[i - 1];
     }
 
     for (int i = size - 1; i >= 0; i--)
     {
-        output[count[array[i]] - 1] = array[i];
-        count[array[i]]--;
+        output[count[array[i] - min] - 1] = array[i];
+        count[array[i] - min]--;
     }
 
     for (int i = 0; i < size; i++)

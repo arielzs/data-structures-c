@@ -1,7 +1,7 @@
 #include "common.h"
 #include "utils.h"
 
-void utilsClearInputBuffer(void)
+void utilsClearInputBuffer()
 {
     int c;
 
@@ -29,18 +29,18 @@ int utilsReadInt(const char *prompt)
 
         if (result == EOF)
         {
-            printf("\nEntrada encerrada. Finalizando o programa.\n");
+            printf("\nInput closed. Exiting the program.\n");
             exit(0);
         }
 
-        printf("Entrada invalida! Digite um numero.\n");
+        printf("Invalid input! Enter a number.\n");
         utilsClearInputBuffer();
     }
 }
 
-void utilsPause(void)
+void utilsPause()
 {
-    printf("Pressione ENTER para continuar...");
+    printf("Press ENTER to continue...");
     getchar();
 }
 

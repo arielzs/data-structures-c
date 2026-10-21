@@ -47,7 +47,7 @@ static void createTree(TreeType type)
 
         if (trees == NULL)
         {
-            printf("Erro ao alocar memoria\n");
+            printf("Memory allocation failed\n");
             exit(1);
         }
     }
@@ -59,28 +59,28 @@ static void createTree(TreeType type)
     active = totalTrees;
     totalTrees++;
 
-    printf("Arvore %d (%s) criada e definida como ativa!\n", trees[active].id, typeName(type));
+    printf("Tree %d (%s) created and set as active!\n", trees[active].id, typeName(type));
 }
 
-static void listTrees(void)
+static void listTrees()
 {
     if (totalTrees == 0)
     {
-        printf("Nenhuma arvore criada ainda. Use o comando [1] para criar uma.\n");
+        printf("No trees created yet. Use command [1] to create one.\n");
         return;
     }
 
-    printf("=== Arvores criadas ===\n");
+    printf("=== Created trees ===\n");
 
     for (int i = 0; i < totalTrees; i++)
     {
         if (i == active)
         {
-            printf("Arvore %d - %s (ativa)\n", trees[i].id, typeName(trees[i].type));
+            printf("Tree %d - %s (active)\n", trees[i].id, typeName(trees[i].type));
         }
         else
         {
-            printf("Arvore %d - %s\n", trees[i].id, typeName(trees[i].type));
+            printf("Tree %d - %s\n", trees[i].id, typeName(trees[i].type));
         }
     }
 }
@@ -89,61 +89,61 @@ static void switchTree(int number)
 {
     if (number < 1 || number > totalTrees)
     {
-        printf("Arvore invalida!\n");
+        printf("Invalid tree!\n");
         return;
     }
 
     active = number - 1;
-    printf("Arvore ativa agora: %d (%s)\n", trees[active].id, typeName(trees[active].type));
+    printf("Active tree is now: %d (%s)\n", trees[active].id, typeName(trees[active].type));
 }
 
-void runTreeMenu(void)
+void runTreeMenu()
 {
     int command, data;
     int running = 1;
 
     while (running)
     {
-        printf("\n=== MENU ARVORES");
+        printf("\n=== TREES MENU");
 
         if (active != -1)
         {
-            printf(" | Arvore ativa: %d (%s)", trees[active].id, typeName(trees[active].type));
+            printf(" | Active tree: %d (%s)", trees[active].id, typeName(trees[active].type));
         }
 
         printf(" ===\n");
 
-        printf("[0] Voltar ao menu principal\n");
-        printf("[1] Cria uma nova arvore\n");
-        printf("[2] Lista as arvores criadas\n");
-        printf("[3] Troca a arvore ativa\n");
-        printf("[4] Imprime em Ordem\n");
-        printf("[5] Imprime em Pre-Ordem\n");
-        printf("[6] Imprime em Pos-Ordem\n");
-        printf("[7] Insere elemento\n");
-        printf("[8] Remove elemento\n");
-        printf("[9] Busca um elemento\n");
-        printf("[10] Altura da Arvore\n");
-        printf("[11] Nodes da Arvore\n");
-        printf("[12] Folhas da Arvore\n");
-        printf("[13] Nivel de um Node\n");
-        printf("[14] Copia a arvore ativa (cria uma nova)\n");
-        printf("[15] Compara duas arvores\n");
-        printf("[16] Inverte arvore ativa\n");
-        printf("[17] Verifica se eh uma BST valida\n");
-        printf("--- Comandos exclusivos da AVL (testar balanceamento) ---\n");
-        printf("[18] Mostra o fator de balanceamento da raiz\n");
-        printf("[19] Rotaciona a raiz para a direita\n");
-        printf("[20] Rotaciona a raiz para a esquerda\n");
-        printf("[21] Rotacao dupla Esquerda-Direita na raiz\n");
-        printf("[22] Rotacao dupla Direita-Esquerda na raiz\n");
-        printf("[23] Forca o balanceamento da raiz\n");
+        printf("[0] Back to main menu\n");
+        printf("[1] Create a new tree\n");
+        printf("[2] List the created trees\n");
+        printf("[3] Switch the active tree\n");
+        printf("[4] Print in-order\n");
+        printf("[5] Print pre-order\n");
+        printf("[6] Print post-order\n");
+        printf("[7] Insert element\n");
+        printf("[8] Remove element\n");
+        printf("[9] Search for an element\n");
+        printf("[10] Tree height\n");
+        printf("[11] Tree node count\n");
+        printf("[12] Tree leaf count\n");
+        printf("[13] Level of a node\n");
+        printf("[14] Copy the active tree (creates a new one)\n");
+        printf("[15] Compare two trees\n");
+        printf("[16] Invert the active tree\n");
+        printf("[17] Check if it is a valid BST\n");
+        printf("--- AVL-only commands (balancing tests) ---\n");
+        printf("[18] Show the root balance factor\n");
+        printf("[19] Rotate the root right\n");
+        printf("[20] Rotate the root left\n");
+        printf("[21] Left-Right double rotation on the root\n");
+        printf("[22] Right-Left double rotation on the root\n");
+        printf("[23] Force balancing of the root\n");
 
-        command = utilsReadInt("Escolha: ");
+        command = utilsReadInt("Choice: ");
 
         if (active == -1 && command != 0 && command != 1 && command != 2)
         {
-            printf("Voce precisa criar uma arvore primeiro! (comando 1)\n");
+            printf("You need to create a tree first! (command 1)\n");
             continue;
         }
 
@@ -155,7 +155,7 @@ void runTreeMenu(void)
 
         case 1:
         {
-            int typeChoice = utilsReadInt("Qual tipo de arvore?\n[1] BST\n[2] AVL\n");
+            int typeChoice = utilsReadInt("Which type of tree?\n[1] BST\n[2] AVL\n");
 
             if (typeChoice == 1)
             {
@@ -167,7 +167,7 @@ void runTreeMenu(void)
             }
             else
             {
-                printf("Tipo invalido!\n");
+                printf("Invalid type!\n");
             }
 
             break;
@@ -181,7 +181,7 @@ void runTreeMenu(void)
         {
             listTrees();
 
-            int number = utilsReadInt("Qual arvore deseja ativar?\n");
+            int number = utilsReadInt("Which tree do you want to activate?\n");
 
             switchTree(number);
             break;
@@ -190,7 +190,7 @@ void runTreeMenu(void)
         case 4:
             if (trees[active].root == NULL)
             {
-                printf("Arvore Vazia\n");
+                printf("Empty tree\n");
             }
             else if (trees[active].type == TREE_BST)
             {
@@ -207,7 +207,7 @@ void runTreeMenu(void)
         case 5:
             if (trees[active].root == NULL)
             {
-                printf("Arvore Vazia\n");
+                printf("Empty tree\n");
             }
             else if (trees[active].type == TREE_BST)
             {
@@ -224,7 +224,7 @@ void runTreeMenu(void)
         case 6:
             if (trees[active].root == NULL)
             {
-                printf("Arvore Vazia\n");
+                printf("Empty tree\n");
             }
             else if (trees[active].type == TREE_BST)
             {
@@ -239,7 +239,7 @@ void runTreeMenu(void)
             break;
 
         case 7:
-            data = utilsReadInt("Qual elemento?\n");
+            data = utilsReadInt("Which element?\n");
 
             if (trees[active].type == TREE_BST)
             {
@@ -252,7 +252,7 @@ void runTreeMenu(void)
             break;
 
         case 8:
-            data = utilsReadInt("Qual elemento?\n");
+            data = utilsReadInt("Which element?\n");
 
             if (trees[active].type == TREE_BST)
             {
@@ -266,7 +266,7 @@ void runTreeMenu(void)
 
         case 9:
         {
-            data = utilsReadInt("Qual elemento?\n");
+            data = utilsReadInt("Which element?\n");
 
             int found;
 
@@ -281,11 +281,11 @@ void runTreeMenu(void)
 
             if (found)
             {
-                printf("Elemento encontrado!\n");
+                printf("Element found!\n");
             }
             else
             {
-                printf("Elemento nao encontrado!\n");
+                printf("Element not found!\n");
             }
 
             break;
@@ -304,7 +304,7 @@ void runTreeMenu(void)
                 treeHeight = heightAVL((AVLNode *)trees[active].root);
             }
 
-            printf("A altura da arvore eh: %d\n", treeHeight);
+            printf("Tree height: %d\n", treeHeight);
 
             break;
         }
@@ -322,7 +322,7 @@ void runTreeMenu(void)
                 totalNodes = countNodesAVL((AVLNode *)trees[active].root);
             }
 
-            printf("A arvore tem %d nodes\n", totalNodes);
+            printf("The tree has %d nodes\n", totalNodes);
 
             break;
         }
@@ -340,14 +340,14 @@ void runTreeMenu(void)
                 totalLeaves = countLeavesAVL((AVLNode *)trees[active].root);
             }
 
-            printf("A arvore tem %d folhas\n", totalLeaves);
+            printf("The tree has %d leaves\n", totalLeaves);
 
             break;
         }
 
         case 13:
         {
-            data = utilsReadInt("Qual BSTNode?\n");
+            data = utilsReadInt("Which node?\n");
 
             int level;
 
@@ -362,11 +362,11 @@ void runTreeMenu(void)
 
             if (level == -1)
             {
-                printf("Valor nao encontrado\n");
+                printf("Value not found\n");
             }
             else
             {
-                printf("Nivel: %d\n", level);
+                printf("Level: %d\n", level);
             }
 
             break;
@@ -391,7 +391,7 @@ void runTreeMenu(void)
             createTree(type);
             trees[active].root = copy;
 
-            printf("Arvore %d copiada para a nova arvore %d!\n", sourceId, trees[active].id);
+            printf("Tree %d copied to new tree %d!\n", sourceId, trees[active].id);
 
             break;
         }
@@ -400,12 +400,12 @@ void runTreeMenu(void)
         {
             listTrees();
 
-            int firstNumber = utilsReadInt("Primeira arvore:\n");
-            int secondNumber = utilsReadInt("Segunda arvore:\n");
+            int firstNumber = utilsReadInt("First tree:\n");
+            int secondNumber = utilsReadInt("Second tree:\n");
 
             if (firstNumber < 1 || firstNumber > totalTrees || secondNumber < 1 || secondNumber > totalTrees)
             {
-                printf("Arvore invalida!\n");
+                printf("Invalid tree!\n");
                 break;
             }
 
@@ -414,7 +414,7 @@ void runTreeMenu(void)
 
             if (treeA->type != treeB->type)
             {
-                printf("Arvores de tipos diferentes (BST e AVL) sao sempre consideradas diferentes!\n");
+                printf("Trees of different types (BST and AVL) are always considered different!\n");
                 break;
             }
 
@@ -431,11 +431,11 @@ void runTreeMenu(void)
 
             if (equal)
             {
-                printf("As arvores sao iguais!\n");
+                printf("The trees are equal!\n");
             }
             else
             {
-                printf("As arvores sao diferentes!\n");
+                printf("The trees are different!\n");
             }
 
             break;
@@ -444,17 +444,17 @@ void runTreeMenu(void)
         case 16:
             if (trees[active].root == NULL)
             {
-                printf("Arvore Vazia\n");
+                printf("Empty tree\n");
             }
             else if (trees[active].type == TREE_BST)
             {
                 invertTree((BSTNode *)trees[active].root);
-                printf("Arvore invertida!\n");
+                printf("Tree inverted!\n");
             }
             else
             {
                 invertTreeAVL((AVLNode *)trees[active].root);
-                printf("Arvore invertida!\n");
+                printf("Tree inverted!\n");
             }
             break;
 
@@ -473,11 +473,11 @@ void runTreeMenu(void)
 
             if (valid)
             {
-                printf("A arvore eh uma BST valida!\n");
+                printf("The tree is a valid BST!\n");
             }
             else
             {
-                printf("A arvore nao eh uma BST valida!\n");
+                printf("The tree is not a valid BST!\n");
             }
 
             break;
@@ -486,117 +486,117 @@ void runTreeMenu(void)
         case 18:
             if (trees[active].type != TREE_AVL)
             {
-                printf("Esse comando so funciona em arvores AVL!\n");
+                printf("This command only works on AVL trees!\n");
             }
             else if (trees[active].root == NULL)
             {
-                printf("Arvore Vazia\n");
+                printf("Empty tree\n");
             }
             else
             {
                 int factor = balanceFactor((AVLNode *)trees[active].root);
-                printf("Fator de balanceamento da raiz: %d\n", factor);
+                printf("Root balance factor: %d\n", factor);
             }
             break;
 
         case 19:
             if (trees[active].type != TREE_AVL)
             {
-                printf("Esse comando so funciona em arvores AVL!\n");
+                printf("This command only works on AVL trees!\n");
             }
             else if (trees[active].root == NULL)
             {
-                printf("Arvore Vazia\n");
+                printf("Empty tree\n");
             }
             else if (((AVLNode *)trees[active].root)->left == NULL)
             {
-                printf("Nao eh possivel rotacionar para a direita: a raiz nao tem filho a esquerda!\n");
+                printf("Cannot rotate right: the root has no left child!\n");
             }
             else
             {
                 trees[active].root = rotateRight((AVLNode *)trees[active].root);
-                printf("Rotacao a direita aplicada na raiz!\n");
+                printf("Right rotation applied to the root!\n");
             }
             break;
 
         case 20:
             if (trees[active].type != TREE_AVL)
             {
-                printf("Esse comando so funciona em arvores AVL!\n");
+                printf("This command only works on AVL trees!\n");
             }
             else if (trees[active].root == NULL)
             {
-                printf("Arvore Vazia\n");
+                printf("Empty tree\n");
             }
             else if (((AVLNode *)trees[active].root)->right == NULL)
             {
-                printf("Nao eh possivel rotacionar para a esquerda: a raiz nao tem filho a direita!\n");
+                printf("Cannot rotate left: the root has no right child!\n");
             }
             else
             {
                 trees[active].root = rotateLeft((AVLNode *)trees[active].root);
-                printf("Rotacao a esquerda aplicada na raiz!\n");
+                printf("Left rotation applied to the root!\n");
             }
             break;
 
         case 21:
             if (trees[active].type != TREE_AVL)
             {
-                printf("Esse comando so funciona em arvores AVL!\n");
+                printf("This command only works on AVL trees!\n");
             }
             else if (trees[active].root == NULL)
             {
-                printf("Arvore Vazia\n");
+                printf("Empty tree\n");
             }
             else if (((AVLNode *)trees[active].root)->left == NULL || ((AVLNode *)trees[active].root)->left->right == NULL)
             {
-                printf("Nao eh possivel fazer a rotacao dupla Esquerda-Direita nessa configuracao!\n");
+                printf("Cannot do a Left-Right double rotation in this configuration!\n");
             }
             else
             {
                 trees[active].root = rotateLeftRight((AVLNode *)trees[active].root);
-                printf("Rotacao dupla Esquerda-Direita aplicada na raiz!\n");
+                printf("Left-Right double rotation applied to the root!\n");
             }
             break;
 
         case 22:
             if (trees[active].type != TREE_AVL)
             {
-                printf("Esse comando so funciona em arvores AVL!\n");
+                printf("This command only works on AVL trees!\n");
             }
             else if (trees[active].root == NULL)
             {
-                printf("Arvore Vazia\n");
+                printf("Empty tree\n");
             }
             else if (((AVLNode *)trees[active].root)->right == NULL || ((AVLNode *)trees[active].root)->right->left == NULL)
             {
-                printf("Nao eh possivel fazer a rotacao dupla Direita-Esquerda nessa configuracao!\n");
+                printf("Cannot do a Right-Left double rotation in this configuration!\n");
             }
             else
             {
                 trees[active].root = rotateRightLeft((AVLNode *)trees[active].root);
-                printf("Rotacao dupla Direita-Esquerda aplicada na raiz!\n");
+                printf("Right-Left double rotation applied to the root!\n");
             }
             break;
 
         case 23:
             if (trees[active].type != TREE_AVL)
             {
-                printf("Esse comando so funciona em arvores AVL!\n");
+                printf("This command only works on AVL trees!\n");
             }
             else if (trees[active].root == NULL)
             {
-                printf("Arvore Vazia\n");
+                printf("Empty tree\n");
             }
             else
             {
                 trees[active].root = balance((AVLNode *)trees[active].root);
-                printf("Balanceamento forcado na raiz!\n");
+                printf("Balance forced on the root!\n");
             }
             break;
 
         default:
-            printf("Insira um comando valido!\n");
+            printf("Enter a valid command!\n");
             break;
         }
     }

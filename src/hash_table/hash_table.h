@@ -2,7 +2,7 @@
 #define HASH_TABLE_H
 
 /* Ponto de entrada do submenu de hash tables, chamado pelo menu.c */
-void runHashTableMenu(void);
+void runHashTableMenu();
 
 /* ===================== Hash Table com encadeamento ===================== */
 

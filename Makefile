@@ -37,7 +37,7 @@ TEST_BINS = $(TEST_SRC:tests/%.c=bin/tests/%)
 
 test: $(TEST_BINS)
 	@echo ""
-	@echo "===================== Rodando testes ====================="
+	@echo "===================== Running tests ====================="
 	@passed=0; failed=0; \
 	for t in $(TEST_BINS); do \
 		echo ""; \
@@ -46,12 +46,12 @@ test: $(TEST_BINS)
 			passed=$$((passed + 1)); \
 		else \
 			failed=$$((failed + 1)); \
-			echo "FALHOU: $$t"; \
+			echo "FAILED: $$t"; \
 		fi; \
 	done; \
 	echo ""; \
 	echo "============================================================"; \
-	echo "$$passed passaram, $$failed falharam"; \
+	echo "$$passed passed, $$failed failed"; \
 	if [ $$failed -gt 0 ]; then exit 1; fi
 
 bin/tests/%: tests/%.c $(LIB_SRC)
