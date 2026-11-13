@@ -217,6 +217,13 @@ static void merge(int *array, int start, int mid, int end)
     int *tempLeft = malloc(leftSize * sizeof(int));
     int *tempRight = malloc(rightSize * sizeof(int));
 
+    if (tempLeft == NULL || tempRight == NULL)
+    {
+        free(tempLeft);
+        free(tempRight);
+        return;
+    }
+
     for (int i = 0; i < leftSize; i++)
     {
         tempLeft[i] = array[start + i];
